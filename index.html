@@ -654,7 +654,7 @@
                     <div class="menu-card-desc">비밀번호 변경, 사업자 권한 등 자주 묻는 질문 모음</div>
                 </div>
 
-                <div class="menu-card">
+                <div class="menu-card" onclick="app.goToPage('menu4-screen1')">
                     <div class="menu-card-emoji">🛡️</div>
                     <div class="menu-card-title">통합 관리자 권한 부여</div>
                     <div class="menu-card-desc">통합 관리자 서비스 접근 권한이 필요한 경우</div>
@@ -772,6 +772,142 @@
                     <p>권한 담당자 확인 후 요청서 댓글로 안내드립니다.</p>
                     <div class="button-group" style="justify-content: center;">
                         <button type="button" class="button primary" onclick="app.goToPage('main')">메인으로 돌아가기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Menu 4 - Screen 1: Input -->
+        <div id="page-menu4-screen1" class="page">
+            <button class="back-button" onclick="app.goToPage('main')">← 돌아가기</button>
+
+            <div class="header menu6">
+                <h1>통합 관리자 권한 부여</h1>
+            </div>
+
+            <div class="form-wrapper">
+                <!-- Notice Box -->
+                <div class="info-box">
+                    플레인 > 서비스기획팀_권한 요청 프로젝트 가입이 필요합니다
+                </div>
+
+                <a href="https://project.cowave.kr/danawa/projects/ce5cce0a-b306-4e83-84df-b86f384f21ec/issues/" target="_blank"
+                   style="display: inline-block; margin-bottom: 24px; padding: 12px 16px; background: #6366f1; color: #ffffff; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 500;">
+                    프로젝트 가입하기 →
+                </a>
+
+                <div class="divider"></div>
+
+                <form id="menu4-form">
+                    <div class="form-group">
+                        <label>요청자명 <span class="required">*</span></label>
+                        <input type="text" id="menu4-requester" placeholder="예: 홍길동" required>
+                    </div>
+
+                    <p class="muted-text">* 문의 시 신속한 확인을 위해 권한을 부여 받을 대상자가 요청하는 것을 원칙으로 합니다.</p>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>팀명 <span class="required">*</span></label>
+                            <input type="text" id="menu4-team" placeholder="예: 서비스기획팀" required>
+                        </div>
+                        <div class="form-group">
+                            <label>통합 관리자 <span class="required">*</span></label>
+                            <div class="segmented-control">
+                                <input type="radio" id="menu4-admin-danuri" name="menu4-admin" value="다누리" required>
+                                <label for="menu4-admin-danuri">다누리</label>
+                                <input type="radio" id="menu4-admin-danawa" name="menu4-admin" value="다나와" required>
+                                <label for="menu4-admin-danawa">다나와</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>서버 <span class="required">*</span></label>
+                        <div class="segmented-control">
+                            <input type="radio" id="menu4-server-prod" name="menu4-server" value="운영" required>
+                            <label for="menu4-server-prod">운영</label>
+                            <input type="radio" id="menu4-server-dev" name="menu4-server" value="개발" required>
+                            <label for="menu4-server-dev">개발</label>
+                            <input type="radio" id="menu4-server-all" name="menu4-server" value="모두" required>
+                            <label for="menu4-server-all">모두</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>권한 역할 <span class="required">*</span></label>
+                        <div class="segmented-control">
+                            <input type="radio" id="menu4-role-op" name="menu4-role" value="운영" onchange="menu4App.toggleRoleDetail()" required>
+                            <label for="menu4-role-op">운영</label>
+                            <input type="radio" id="menu4-role-dev" name="menu4-role" value="개발" onchange="menu4App.toggleRoleDetail()" required>
+                            <label for="menu4-role-dev">개발</label>
+                            <input type="radio" id="menu4-role-plan" name="menu4-role" value="기획" onchange="menu4App.toggleRoleDetail()" required>
+                            <label for="menu4-role-plan">기획</label>
+                        </div>
+                    </div>
+
+                    <!-- Conditional Role Detail -->
+                    <div id="menu4-role-detail" style="display: none; margin-bottom: 20px;">
+                        <label>역할 세부 <span class="required">*</span></label>
+                        <div class="segmented-control">
+                            <input type="radio" id="menu4-role-detail-leader" name="menu4-role-detail" value="팀장" required>
+                            <label for="menu4-role-detail-leader">팀장</label>
+                            <input type="radio" id="menu4-role-detail-cm" name="menu4-role-detail" value="CM" required>
+                            <label for="menu4-role-detail-cm">CM</label>
+                            <input type="radio" id="menu4-role-detail-acm" name="menu4-role-detail" value="ACM" required>
+                            <label for="menu4-role-detail-acm">ACM</label>
+                            <input type="radio" id="menu4-role-detail-etc" name="menu4-role-detail" value="그 외" required>
+                            <label for="menu4-role-detail-etc">그 외</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group form-row full">
+                        <label>필요 권한/서비스 <span class="required">*</span></label>
+                        <textarea id="menu4-services" placeholder="필요한 권한과 서비스를 입력해주세요." required></textarea>
+                    </div>
+
+                    <div class="button-group">
+                        <button type="button" class="button primary" onclick="menu4App.goToScreen2()">요청서 내용 생성하기</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Menu 4 - Screen 2: Result with Modal -->
+        <div id="page-menu4-screen2" class="page">
+            <button class="back-button" onclick="app.goToPage('menu4-screen1')">← 이전</button>
+
+            <div class="header menu6">
+                <h1>요청서 생성</h1>
+            </div>
+
+            <div class="form-wrapper" style="opacity: 0.5; pointer-events: none;">
+                <p style="font-size: 14px; color: #666666; margin-bottom: 24px;">아래 내용을 복사하여 플레인 요청서에 붙여넣기 해주세요.</p>
+
+                <!-- Title Box -->
+                <div style="position: relative; margin-bottom: 20px;">
+                    <div style="background: #f3f4f6; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; word-break: break-word;">
+                        <div id="menu4-result-title" style="font-weight: 500; color: #1a1a1a;"></div>
+                    </div>
+                </div>
+
+                <!-- Content Box -->
+                <div style="position: relative; margin-bottom: 32px;">
+                    <div style="background: #f3f4f6; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; word-break: break-word;">
+                        <pre id="menu4-result-content" style="font-size: 13px; color: #1a1a1a; font-family: monospace; white-space: pre-wrap; line-height: 1.6;"></pre>
+                    </div>
+                </div>
+
+                <p style="font-size: 13px; color: #888888; text-align: center;">위 내용을 복사하여 플레인 요청서에 붙여넣기 해주세요.</p>
+            </div>
+
+            <!-- Modal Popup -->
+            <div id="menu4-modal" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.5); display: flex; align-items: center; justify-content: center; z-index: 1000;">
+                <div style="background: #ffffff; border-radius: 12px; padding: 32px; max-width: 400px; text-align: center;">
+                    <h3 style="font-size: 18px; font-weight: 600; color: #1a1a1a; margin-bottom: 24px;">통합 관리자에 로그인 하셨나요?</h3>
+                    <div style="display: flex; gap: 12px; flex-direction: column;">
+                        <button type="button" class="button primary" onclick="menu4App.handleLogin(true)" style="width: 100%;">네, 했어요</button>
+                        <button type="button" class="button" style="background-color: #e2e8f0; color: #1a1a1a; width: 100%;" onclick="menu4App.handleLogin(false)">아니요, 방법을 모르겠어요</button>
                     </div>
                 </div>
             </div>
@@ -1278,6 +1414,113 @@ ${menuSettings}`;
                 cards[4].style.cursor = 'pointer';
             }
         });
+
+        // Menu 4 Application
+        const menu4App = {
+            state: {
+                requester: '',
+                team: '',
+                admin: '',
+                server: '',
+                role: '',
+                roleDetail: '',
+                services: ''
+            },
+
+            toggleRoleDetail() {
+                const role = document.querySelector('input[name="menu4-role"]:checked')?.value;
+                const detailContainer = document.getElementById('menu4-role-detail');
+
+                if (role === '운영') {
+                    detailContainer.style.display = 'block';
+                } else {
+                    detailContainer.style.display = 'none';
+                    document.querySelectorAll('input[name="menu4-role-detail"]').forEach(input => {
+                        input.checked = false;
+                    });
+                }
+            },
+
+            goToScreen2() {
+                if (!this.validateForm()) return;
+                this.saveFormData();
+                this.generateResult();
+                app.goToPage('menu4-screen2');
+            },
+
+            saveFormData() {
+                this.state.requester = document.getElementById('menu4-requester').value;
+                this.state.team = document.getElementById('menu4-team').value;
+                this.state.admin = document.querySelector('input[name="menu4-admin"]:checked')?.value || '';
+                this.state.server = document.querySelector('input[name="menu4-server"]:checked')?.value || '';
+                this.state.role = document.querySelector('input[name="menu4-role"]:checked')?.value || '';
+                this.state.roleDetail = document.querySelector('input[name="menu4-role-detail"]:checked')?.value || '';
+                this.state.services = document.getElementById('menu4-services').value;
+            },
+
+            validateForm() {
+                if (!this.state.requester.trim()) {
+                    alert('요청자명을 입력해주세요');
+                    return false;
+                }
+                if (!document.getElementById('menu4-requester').value.trim()) {
+                    alert('요청자명을 입력해주세요');
+                    return false;
+                }
+                if (!document.getElementById('menu4-team').value.trim()) {
+                    alert('팀명을 입력해주세요');
+                    return false;
+                }
+                if (!document.querySelector('input[name="menu4-admin"]:checked')) {
+                    alert('통합 관리자를 선택해주세요');
+                    return false;
+                }
+                if (!document.querySelector('input[name="menu4-server"]:checked')) {
+                    alert('서버를 선택해주세요');
+                    return false;
+                }
+                if (!document.querySelector('input[name="menu4-role"]:checked')) {
+                    alert('권한 역할을 선택해주세요');
+                    return false;
+                }
+                const role = document.querySelector('input[name="menu4-role"]:checked')?.value;
+                if (role === '운영' && !document.querySelector('input[name="menu4-role-detail"]:checked')) {
+                    alert('역할 세부를 선택해주세요');
+                    return false;
+                }
+                if (!document.getElementById('menu4-services').value.trim()) {
+                    alert('필요 권한/서비스를 입력해주세요');
+                    return false;
+                }
+                return true;
+            },
+
+            generateResult() {
+                const serverDisplay = this.state.server === '모두' ? '운영/개발' : this.state.server;
+                const title = `[${this.state.team}] ${this.state.admin} ${serverDisplay} 통합관리자 권한 부여 요청`;
+
+                const roleDisplay = this.state.role === '운영'
+                    ? `${this.state.role} - ${this.state.roleDetail}`
+                    : this.state.role;
+
+                const content = `요청자명: ${this.state.requester}
+통합 관리자: ${this.state.admin}
+서버: (${this.state.server})
+권한 역할: ${roleDisplay}
+필요 권한/서비스: ${this.state.services}`;
+
+                document.getElementById('menu4-result-title').textContent = title;
+                document.getElementById('menu4-result-content').textContent = content;
+            },
+
+            handleLogin(didLogin) {
+                if (didLogin) {
+                    app.goToPage('menu6');
+                } else {
+                    app.goToPage('menu6');
+                }
+            }
+        };
     </script>
 </body>
 </html>
