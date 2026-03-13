@@ -1,4 +1,5 @@
-const fetch = require('node-fetch');
+// Use native fetch (Node.js 18+)
+// No need to require node-fetch
 
 exports.handler = async (event) => {
     try {
