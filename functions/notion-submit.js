@@ -2,11 +2,14 @@ const fetch = require('node-fetch');
 
 exports.handler = async (event) => {
     try {
+        console.log('🔍 Request received:', event.body);
         const data = JSON.parse(event.body);
         const { admin, server, teamName, userName, requestLink } = data;
+        console.log('✅ Data parsed:', { admin, server, teamName, userName, requestLink });
 
         // Get current date in YYYY-MM-DD format
         const today = new Date().toISOString().split('T')[0];
+        console.log('📅 Today:', today);
 
         // Create page in Notion database
         const response = await fetch('https://api.notion.com/v1/pages', {
@@ -29,9 +32,13 @@ exports.handler = async (event) => {
             }),
         });
 
+        console.log('🚀 Notion API Response:', response.status, response.statusText);
+
         if (response.ok) {
+            console.log('✅ Page created successfully');
             const page = await response.json();
             const pageId = page.id;
+            console.log('📄 Page ID:', pageId);
 
             const commentText = `📥 새 로그인 완료 요청이 접수되었습니다.
 통합 관리자: ${admin} / 서버: ${server}
@@ -52,8 +59,16 @@ exports.handler = async (event) => {
             });
         }
 
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error('❌ Notion API Error:', errorText);
+            return { statusCode: 502, body: JSON.stringify({ success: false, error: errorText }) };
+        }
+
         return { statusCode: 200, body: JSON.stringify({ success: response.ok }) };
     } catch (error) {
+        console.error('💥 Function Error:', error.message);
+        console.error('Stack:', error.stack);
         return { statusCode: 500, body: JSON.stringify({ success: false, error: error.message }) };
     }
 };
