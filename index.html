@@ -468,6 +468,157 @@
         ::-webkit-scrollbar-thumb:hover {
             background: rgba(99, 102, 241, 0.5);
         }
+
+        /* Menu 5 - Tree Builder */
+        .tree-builder-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 12px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+        }
+
+        .tree-item {
+            display: grid;
+            grid-template-columns: 60px 1fr 40px 40px 40px;
+            gap: 8px;
+            align-items: center;
+            padding: 12px;
+            background: #ffffff;
+            border-left: 3px solid #6366f1;
+            border-radius: 6px;
+        }
+
+        .tree-item[data-depth="2"] {
+            margin-left: 24px;
+            border-left-color: #a78bfa;
+        }
+
+        .tree-item[data-depth="3"] {
+            margin-left: 48px;
+            border-left-color: #c4b5fd;
+        }
+
+        .tree-item[data-depth="4"] {
+            margin-left: 72px;
+            border-left-color: #ddd6fe;
+        }
+
+        .tree-depth-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            background: #f3f4f6;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #6b7280;
+            text-align: center;
+        }
+
+        .tree-item-input {
+            padding: 8px 10px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 13px;
+            font-family: inherit;
+        }
+
+        .tree-item-button {
+            padding: 6px 8px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            background: #ffffff;
+            color: #6b7280;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .tree-item-button:hover {
+            border-color: #6366f1;
+            color: #6366f1;
+        }
+
+        .tree-item-delete {
+            padding: 6px 8px;
+            border: 1px solid #fee2e2;
+            border-radius: 6px;
+            background: #fef2f2;
+            color: #ef4444;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .tree-item-delete:hover {
+            background: #fecaca;
+        }
+
+        /* Menu 5 - Detail Cards */
+        .menu5-detail-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .menu5-detail-card-header {
+            background: #f3f4f6;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: #4b5563;
+            font-weight: 500;
+        }
+
+        .menu5-detail-field-group {
+            margin-bottom: 16px;
+        }
+
+        .menu5-detail-field-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: #1a1a1a;
+            margin-bottom: 6px;
+        }
+
+        .menu5-detail-field-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 13px;
+            font-family: inherit;
+        }
+
+        .menu5-detail-toggle {
+            display: flex;
+            gap: 8px;
+        }
+
+        .menu5-detail-toggle-button {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            background: #ffffff;
+            color: #6b7280;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .menu5-detail-toggle-button.active {
+            background: #6366f1;
+            color: #ffffff;
+            border-color: #6366f1;
+        }
     </style>
 </head>
 <body>
@@ -509,7 +660,7 @@
                     <div class="menu-card-desc">통합 관리자 서비스 접근 권한이 필요한 경우</div>
                 </div>
 
-                <div class="menu-card">
+                <div class="menu-card" onclick="app.goToPage('menu5-screen1')">
                     <div class="menu-card-emoji">📋</div>
                     <div class="menu-card-title">통합 관리자 메뉴 생성 요청</div>
                     <div class="menu-card-desc">통합 관리자에 새로운 메뉴 추가가 필요한 개발자</div>
@@ -625,6 +776,119 @@
                 </div>
             </div>
         </div>
+
+        <!-- Menu 5 - Screen 1: Basic Info + Tree Builder -->
+        <div id="page-menu5-screen1" class="page">
+            <button class="back-button" onclick="app.goToPage('main')">← 돌아가기</button>
+
+            <div class="header menu6">
+                <h1>통합 관리자 메뉴 생성 요청</h1>
+            </div>
+
+            <div class="form-wrapper">
+                <form id="menu5-form-screen1">
+                    <!-- Basic Info Section -->
+                    <div class="form-group">
+                        <label>요청자명 <span class="required">*</span></label>
+                        <input type="text" id="menu5-requester" placeholder="예: 홍길동" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>팀명 <span class="required">*</span></label>
+                            <input type="text" id="menu5-team" placeholder="예: 개발팀" required>
+                        </div>
+                        <div class="form-group">
+                            <label>통합 관리자 <span class="required">*</span></label>
+                            <div class="segmented-control">
+                                <input type="radio" id="menu5-admin-danuri" name="menu5-admin" value="다누리" required>
+                                <label for="menu5-admin-danuri">다누리</label>
+                                <input type="radio" id="menu5-admin-danawa" name="menu5-admin" value="다나와" required>
+                                <label for="menu5-admin-danawa">다나와</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>서버 <span class="required">*</span></label>
+                        <div class="segmented-control">
+                            <input type="radio" id="menu5-server-prod" name="menu5-server" value="운영" required>
+                            <label for="menu5-server-prod">운영</label>
+                            <input type="radio" id="menu5-server-dev" name="menu5-server" value="개발" required>
+                            <label for="menu5-server-dev">개발</label>
+                            <input type="radio" id="menu5-server-all" name="menu5-server" value="모두" required>
+                            <label for="menu5-server-all">모두</label>
+                        </div>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <!-- Tree Builder Section -->
+                    <div class="form-group">
+                        <label style="margin-bottom: 16px;">메뉴 구조 입력 <span class="required">*</span></label>
+                        <div id="menu5-tree-container" class="tree-builder-container"></div>
+                        <button type="button" class="button" style="background-color: #e2e8f0; color: #1a1a1a; margin-top: 16px; width: 100%;" onclick="menu5App.addTreeItem()">+ 항목 추가</button>
+                    </div>
+
+                    <div class="button-group">
+                        <button type="button" class="button primary" onclick="menu5App.goToScreen2()">다음 단계 →</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Menu 5 - Screen 2: Detail Input -->
+        <div id="page-menu5-screen2" class="page">
+            <button class="back-button" onclick="menu5App.goToScreen1()">← 이전</button>
+
+            <div class="header menu6">
+                <h1>메뉴 상세 설정</h1>
+            </div>
+
+            <div class="form-wrapper">
+                <div id="menu5-detail-cards-container" style="display: flex; flex-direction: column; gap: 24px; margin-bottom: 32px;"></div>
+
+                <div class="button-group">
+                    <button type="button" class="button" style="background-color: #e2e8f0; color: #1a1a1a;" onclick="menu5App.goToScreen1()">← 이전</button>
+                    <button type="button" class="button primary" onclick="menu5App.goToScreen3()">결과 보기 →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Menu 5 - Screen 3: Result -->
+        <div id="page-menu5-screen3" class="page">
+            <button class="back-button" onclick="menu5App.goToScreen2()">← 이전</button>
+
+            <div class="header menu6">
+                <h1>요청서 생성</h1>
+            </div>
+
+            <div class="form-wrapper">
+                <p style="font-size: 14px; color: #666666; margin-bottom: 24px;">아래 내용을 복사하여 권한 담당자에게 전달하세요.</p>
+
+                <!-- Title Box -->
+                <div style="position: relative; margin-bottom: 20px;">
+                    <div style="background: #f3f4f6; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; word-break: break-word;">
+                        <div id="menu5-result-title" style="font-weight: 500; color: #1a1a1a;"></div>
+                    </div>
+                    <button type="button" class="button" style="position: absolute; top: 12px; right: 12px; padding: 6px 12px; font-size: 12px; background-color: #6366f1; color: #ffffff;" onclick="menu5App.copyToClipboard('title')">복사</button>
+                </div>
+
+                <!-- Content Box -->
+                <div style="position: relative; margin-bottom: 32px;">
+                    <div style="background: #f3f4f6; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; word-break: break-word;">
+                        <pre id="menu5-result-content" style="font-size: 13px; color: #1a1a1a; font-family: monospace; white-space: pre-wrap; line-height: 1.6;"></pre>
+                    </div>
+                    <button type="button" class="button" style="position: absolute; top: 12px; right: 12px; padding: 6px 12px; font-size: 12px; background-color: #6366f1; color: #ffffff;" onclick="menu5App.copyToClipboard('content')">복사</button>
+                </div>
+
+                <p style="font-size: 13px; color: #888888; text-align: center;">위 내용을 복사하여 권한 담당자에게 전달해주세요.</p>
+
+                <div class="button-group">
+                    <button type="button" class="button primary" onclick="app.goToPage('main')" style="width: 100%;">메인으로 돌아가기</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -708,6 +972,310 @@
         otpCheckbox.addEventListener('change', (e) => {
             if (!e.target.checked) {
                 e.target.checked = true;
+            }
+        });
+
+        // Menu 5 Application
+        const menu5App = {
+            state: {
+                requester: '',
+                team: '',
+                admin: '',
+                server: '',
+                treeItems: [],
+                details: {}
+            },
+
+            addTreeItem() {
+                const newItem = {
+                    id: Date.now(),
+                    depth: 1,
+                    name: ''
+                };
+                this.state.treeItems.push(newItem);
+                this.renderTree();
+            },
+
+            deleteTreeItem(id) {
+                this.state.treeItems = this.state.treeItems.filter(item => item.id !== id);
+                this.renderTree();
+            },
+
+            updateTreeItem(id, field, value) {
+                const item = this.state.treeItems.find(item => item.id === id);
+                if (item) {
+                    item[field] = value;
+                    this.renderTree();
+                }
+            },
+
+            changeDepth(id, direction) {
+                const item = this.state.treeItems.find(item => item.id === id);
+                if (item) {
+                    const newDepth = item.depth + (direction === 'up' ? 1 : -1);
+                    if (newDepth >= 1 && newDepth <= 4) {
+                        item.depth = newDepth;
+                        this.renderTree();
+                    }
+                }
+            },
+
+            renderTree() {
+                const container = document.getElementById('menu5-tree-container');
+                container.innerHTML = this.state.treeItems.map(item => `
+                    <div class="tree-item" data-depth="${item.depth}">
+                        <span class="tree-depth-badge">${item.depth}Depth</span>
+                        <input type="text" class="tree-item-input" placeholder="메뉴명" value="${item.name}"
+                            onchange="menu5App.updateTreeItem(${item.id}, 'name', this.value)">
+                        <button type="button" class="tree-item-button" ${item.depth === 4 ? 'disabled' : ''}
+                            onclick="menu5App.changeDepth(${item.id}, 'up')">뎁스↑</button>
+                        <button type="button" class="tree-item-button" ${item.depth === 1 ? 'disabled' : ''}
+                            onclick="menu5App.changeDepth(${item.id}, 'down')">뎁스↓</button>
+                        <button type="button" class="tree-item-delete" onclick="menu5App.deleteTreeItem(${item.id})">🗑</button>
+                    </div>
+                `).join('');
+            },
+
+            goToScreen1() {
+                this.saveFormData();
+                app.goToPage('menu5-screen1');
+            },
+
+            goToScreen2() {
+                if (!this.validateScreen1()) return;
+                this.saveFormData();
+                this.renderDetailCards();
+                app.goToPage('menu5-screen2');
+            },
+
+            goToScreen1FromScreen2() {
+                app.goToPage('menu5-screen1');
+            },
+
+            goToScreen3() {
+                this.saveDetailData();
+                this.generateResult();
+                app.goToPage('menu5-screen3');
+            },
+
+            saveFormData() {
+                this.state.requester = document.getElementById('menu5-requester').value;
+                this.state.team = document.getElementById('menu5-team').value;
+                this.state.admin = document.querySelector('input[name="menu5-admin"]:checked')?.value || '';
+                this.state.server = document.querySelector('input[name="menu5-server"]:checked')?.value || '';
+            },
+
+            validateScreen1() {
+                if (!this.state.requester.trim()) {
+                    alert('요청자명을 입력해주세요');
+                    return false;
+                }
+                if (!this.state.team.trim()) {
+                    alert('팀명을 입력해주세요');
+                    return false;
+                }
+                if (!this.state.admin) {
+                    alert('통합 관리자를 선택해주세요');
+                    return false;
+                }
+                if (!this.state.server) {
+                    alert('서버를 선택해주세요');
+                    return false;
+                }
+                if (this.state.treeItems.length === 0) {
+                    alert('최소 1개 이상의 메뉴를 추가해주세요');
+                    return false;
+                }
+                return true;
+            },
+
+            renderDetailCards() {
+                const container = document.getElementById('menu5-detail-cards-container');
+                container.innerHTML = this.state.treeItems.map((item, index) => {
+                    const parentName = item.depth > 1 ? this.getParentName(item, index) : '';
+                    const headerText = item.depth === 1
+                        ? `[1Depth] ${item.name}`
+                        : `[${item.depth}Depth] ${item.name} (${parentName} 하위 · ${this.getChildIndex(item, index)}번째)`;
+
+                    return `
+                        <div class="menu5-detail-card">
+                            <div class="menu5-detail-card-header">${headerText}</div>
+
+                            <div class="menu5-detail-field-group">
+                                <label class="menu5-detail-field-label">메뉴명</label>
+                                <input type="text" class="menu5-detail-field-input" value="${item.name}"
+                                    onchange="menu5App.updateDetailField(${item.id}, 'menuName', this.value)">
+                            </div>
+
+                            ${item.depth === 1 ? `
+                                <div class="menu5-detail-field-group">
+                                    <label class="menu5-detail-field-label">도메인</label>
+                                    <input type="text" class="menu5-detail-field-input" placeholder="http://"
+                                        value="${this.state.details[item.id]?.domain || 'http://'}"
+                                        onchange="menu5App.updateDetailField(${item.id}, 'domain', this.value)">
+                                </div>
+                            ` : ''}
+
+                            <div class="menu5-detail-field-group">
+                                <label class="menu5-detail-field-label">Path</label>
+                                <input type="text" class="menu5-detail-field-input" placeholder="/"
+                                    value="${this.state.details[item.id]?.path || '/'}"
+                                    onchange="menu5App.updateDetailField(${item.id}, 'path', this.value)">
+                            </div>
+
+                            <div class="menu5-detail-field-group">
+                                <label class="menu5-detail-field-label">메뉴 설명</label>
+                                <input type="text" class="menu5-detail-field-input"
+                                    value="${this.state.details[item.id]?.description || ''}"
+                                    onchange="menu5App.updateDetailField(${item.id}, 'description', this.value)">
+                            </div>
+
+                            <div class="menu5-detail-field-group">
+                                <label class="menu5-detail-field-label">활성화 및 ${item.depth === 1 ? '하위메뉴 노출' : '노출'}</label>
+                                <div class="menu5-detail-toggle">
+                                    <button type="button" class="menu5-detail-toggle-button ${this.state.details[item.id]?.active === 'Y' ? 'active' : ''}"
+                                        onclick="menu5App.updateDetailField(${item.id}, 'active', 'Y')">Y</button>
+                                    <button type="button" class="menu5-detail-toggle-button ${this.state.details[item.id]?.active === 'N' ? 'active' : ''}"
+                                        onclick="menu5App.updateDetailField(${item.id}, 'active', 'N')">N</button>
+                                </div>
+                            </div>
+
+                            <div class="menu5-detail-field-group">
+                                <label class="menu5-detail-field-label">메뉴 순서</label>
+                                <input type="text" class="menu5-detail-field-input"
+                                    value="${this.state.details[item.id]?.order || (item.depth === 1 ? 'last' : '')}"
+                                    onchange="menu5App.updateDetailField(${item.id}, 'order', this.value)">
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            },
+
+            getParentName(item, currentIndex) {
+                for (let i = currentIndex - 1; i >= 0; i--) {
+                    if (this.state.treeItems[i].depth < item.depth) {
+                        return this.state.treeItems[i].name;
+                    }
+                }
+                return '';
+            },
+
+            getChildIndex(item, currentIndex) {
+                let count = 0;
+                for (let i = currentIndex - 1; i >= 0; i--) {
+                    if (this.state.treeItems[i].depth < item.depth) {
+                        break;
+                    }
+                    if (this.state.treeItems[i].depth === item.depth) {
+                        count++;
+                    }
+                }
+                return count + 1;
+            },
+
+            updateDetailField(id, field, value) {
+                if (!this.state.details[id]) {
+                    this.state.details[id] = {};
+                }
+                this.state.details[id][field] = value;
+            },
+
+            saveDetailData() {
+                // Auto-save via updateDetailField
+            },
+
+            generateResult() {
+                const serverDisplay = this.state.server === '모두' ? '운영/개발' : this.state.server;
+
+                const title = `[${this.state.team}] ${this.state.admin} ${serverDisplay} 필요 권한/서비스 메뉴 추가 요청`;
+
+                let treeStructure = this.buildTreeStructure();
+                let menuSettings = this.buildMenuSettings();
+
+                const content = `요청자명: ${this.state.requester}
+통합 관리자: ${this.state.admin}
+서버: ${serverDisplay}
+
+메뉴 구조
+${treeStructure}
+
+메뉴 설정
+${menuSettings}`;
+
+                document.getElementById('menu5-result-title').textContent = title;
+                document.getElementById('menu5-result-content').textContent = content;
+            },
+
+            buildTreeStructure() {
+                let result = '';
+                let lastDepth = 0;
+
+                this.state.treeItems.forEach((item, index) => {
+                    let prefix = '';
+                    if (item.depth === 1) {
+                        prefix = item.name;
+                    } else {
+                        const isLast = index === this.state.treeItems.length - 1 ||
+                                     this.state.treeItems[index + 1].depth <= item.depth;
+                        prefix = (isLast ? '└── ' : '├── ') + item.name;
+                    }
+                    result += prefix + '\n';
+                });
+
+                return result.trim();
+            },
+
+            buildMenuSettings() {
+                let result = '';
+                let currentDepth = 0;
+
+                this.state.treeItems.forEach((item, index) => {
+                    const details = this.state.details[item.id] || {};
+                    const indent = '  '.repeat(item.depth - 1);
+
+                    if (item.depth === 1) {
+                        result += `- ${item.depth}Depth\n`;
+                        result += `${indent}  - 메뉴명: ${item.name}\n`;
+                        result += `${indent}  - 도메인: ${details.domain || 'http://'}\n`;
+                        result += `${indent}  - Path: ${details.path || '/'}\n`;
+                        result += `${indent}  - 메뉴 설명: ${details.description || ''}\n`;
+                        result += `${indent}  - 활성화 및 하위메뉴 노출: ${details.active || 'Y'}\n`;
+                        result += `${indent}  - 메뉴 순서: ${details.order || 'last'}\n`;
+                    } else {
+                        const parent = this.getParentName(item, index);
+                        result += `- ${item.depth}Depth (${parent} 하위)\n`;
+                        result += `${indent}  - 메뉴명: ${item.name}\n`;
+                        result += `${indent}  - Path: ${details.path || ''}\n`;
+                        result += `${indent}  - 메뉴 설명: ${details.description || ''}\n`;
+                        result += `${indent}  - 활성화 및 노출: ${details.active || 'Y'}\n`;
+                        result += `${indent}  - 메뉴 순서: ${details.order || ''}\n`;
+                    }
+                });
+
+                return result.trim();
+            },
+
+            copyToClipboard(type) {
+                let text = '';
+                if (type === 'title') {
+                    text = document.getElementById('menu5-result-title').textContent;
+                } else {
+                    text = document.getElementById('menu5-result-content').textContent;
+                }
+
+                navigator.clipboard.writeText(text).then(() => {
+                    alert('복사됨 ✓');
+                }).catch(() => {
+                    alert('복사 실패');
+                });
+            }
+        };
+
+        // Update menu card handler for Menu 5
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.menu-card');
+            if (cards[4]) {
+                cards[4].style.cursor = 'pointer';
             }
         });
     </script>
