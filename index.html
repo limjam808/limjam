@@ -351,6 +351,35 @@
             opacity: 0.6;
         }
 
+        /* OTP Checkbox Special Style */
+        #otp-check {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border: 2px solid #10b981;
+            border-radius: 3px;
+            background-color: #10b981;
+            cursor: not-allowed;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            vertical-align: middle;
+        }
+
+        #otp-check:checked::after {
+            content: '✓';
+            color: #ffffff;
+            font-size: 13px;
+            font-weight: bold;
+            line-height: 1;
+        }
+
+        #otp-check:disabled {
+            opacity: 1;
+        }
+
         /* Button */
         .button {
             padding: 12px 24px;
@@ -559,10 +588,21 @@
 
         /* Menu 5 - Detail Cards */
         .menu5-detail-card {
-            background: #ffffff;
             border: 1px solid #e2e8f0;
             border-radius: 12px;
             padding: 24px;
+        }
+
+        .menu5-detail-card--depth-1 {
+            background: #ffffff;
+        }
+
+        .menu5-detail-card--depth-2 {
+            background: #fafbfc;
+        }
+
+        .menu5-detail-card--depth-3 {
+            background: #f5f7fa;
         }
 
         .menu5-detail-card-header {
@@ -619,6 +659,66 @@
             color: #ffffff;
             border-color: #6366f1;
         }
+
+        /* FAQ Accordion */
+        .faq-item {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #ffffff;
+        }
+
+        .faq-question {
+            padding: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 500;
+            color: #1a1a1a;
+            background: #f9fafb;
+            user-select: none;
+            transition: background 0.2s ease;
+        }
+
+        .faq-question:hover {
+            background: #f3f4f6;
+        }
+
+        .faq-icon {
+            display: inline-block;
+            transition: transform 0.3s ease;
+            font-size: 12px;
+            color: #6366f1;
+        }
+
+        .faq-item.open .faq-icon {
+            transform: rotate(90deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: #ffffff;
+        }
+
+        .faq-item.open .faq-answer {
+            max-height: 500px;
+            padding: 16px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .faq-answer p {
+            font-size: 14px;
+            color: #4b5563;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .faq-answer p + p {
+            margin-top: 12px;
+        }
     </style>
 </head>
 <body>
@@ -636,19 +736,19 @@
             </div>
 
             <div class="menu-grid">
-                <div class="menu-card">
+                <div class="menu-card" onclick="app.goToPage('menu1-screen1')">
                     <div class="menu-card-emoji">🆕</div>
-                    <div class="menu-card-title">기존 관리자 계정 생성 및 권한 부여</div>
+                    <div class="menu-card-title">기존 관리자 계정 생성 및 권한 요청</div>
                     <div class="menu-card-desc">신규 입사자이거나 처음으로 관리자 접속이 필요한 경우</div>
                 </div>
 
-                <div class="menu-card">
+                <div class="menu-card" onclick="app.goToPage('menu2-screen1')">
                     <div class="menu-card-emoji">🔑</div>
-                    <div class="menu-card-title">기존 관리자 권한 부여</div>
+                    <div class="menu-card-title">기존 관리자 권한 요청</div>
                     <div class="menu-card-desc">이미 관리자 계정이 있고 추가 권한이 필요한 경우</div>
                 </div>
 
-                <div class="menu-card">
+                <div class="menu-card" onclick="app.goToPage('menu3')">
                     <div class="menu-card-emoji">❓</div>
                     <div class="menu-card-title">문의사항 (FAQ)</div>
                     <div class="menu-card-desc">비밀번호 변경, 사업자 권한 등 자주 묻는 질문 모음</div>
@@ -656,7 +756,7 @@
 
                 <div class="menu-card" onclick="app.goToPage('menu4-screen1')">
                     <div class="menu-card-emoji">🛡️</div>
-                    <div class="menu-card-title">통합 관리자 권한 부여</div>
+                    <div class="menu-card-title">통합 관리자 권한 요청</div>
                     <div class="menu-card-desc">통합 관리자 서비스 접근 권한이 필요한 경우</div>
                 </div>
 
@@ -670,6 +770,300 @@
                     <div class="menu-card-emoji">✅</div>
                     <div class="menu-card-title">통합 관리자 로그인 완료</div>
                     <div class="menu-card-desc">권한 요청 후 통합 관리자 로그인을 완료한 경우</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Menu 1 - Screen 1: 기존 관리자 계정 생성 및 권한 부여 입력 -->
+        <div id="page-menu1-screen1" class="page">
+            <button class="back-button" onclick="app.goToPage('main')">← 돌아가기</button>
+
+            <div class="header menu6">
+                <h1>기존 관리자 계정 생성 및 권한 요청</h1>
+            </div>
+
+            <div class="form-wrapper">
+                <!-- Notice Box with Link -->
+                <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 24px; padding: 16px; background: #f0f4ff; border-radius: 8px;">
+                    <div style="flex: 1; font-size: 14px; color: #1a1a1a;">
+                        플레인 > <span style="font-weight: 600; color: #ef4444;">서비스기획팀_권한요청</span> 프로젝트 가입이 필요합니다
+                    </div>
+                    <a href="https://project.cowave.kr/danawa/projects/ce5cce0a-b306-4e83-84df-b86f384f21ec/issues/" target="_blank"
+                       style="display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; padding: 10px 16px; background: #6366f1; color: #ffffff; border-radius: 6px; text-decoration: none; font-size: 13px; font-weight: 600;">
+                        프로젝트 가입하기 →
+                    </a>
+                </div>
+
+                <div class="divider"></div>
+
+                <form id="menu1-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>요청자명 <span class="required">*</span></label>
+                            <input type="text" id="menu1-requester" placeholder="예: 홍길동" required>
+                        </div>
+                        <div class="form-group">
+                            <label>팀명 <span class="required">*</span></label>
+                            <input type="text" id="menu1-team" placeholder="예: 서비스기획팀" required>
+                        </div>
+                    </div>
+
+                    <p class="muted-text">* 문의 시 신속한 확인을 위해 권한을 부여 받을 대상자가 요청하는 것을 원칙으로 합니다.</p>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>권한 부여 대상자 이름 <span class="required">*</span></label>
+                            <input type="text" id="menu1-target-name" placeholder="예: 홍길동" required>
+                        </div>
+                        <div class="form-group">
+                            <label>권한 부여 대상자 팀명 <span class="required">*</span></label>
+                            <input type="text" id="menu1-target-team" placeholder="예: 서비스기획팀" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>권한 부여 대상자 사번 <span class="required">*</span></label>
+                            <input type="text" id="menu1-target-id" placeholder="예: 12345" required>
+                        </div>
+                        <div class="form-group">
+                            <label>권한 부여 대상자 이메일 <span class="required">*</span></label>
+                            <input type="email" id="menu1-target-email" placeholder="예: user@cowave.kr" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group form-row full">
+                        <label>필요 권한 <span class="required">*</span></label>
+                        <textarea id="menu1-permissions" placeholder="필요한 권한을 입력해주세요." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>서버 <span class="required">*</span></label>
+                        <div class="segmented-control">
+                            <input type="radio" id="menu1-server-prod" name="menu1-server" value="운영" required>
+                            <label for="menu1-server-prod">운영</label>
+                            <input type="radio" id="menu1-server-dev" name="menu1-server" value="개발" required>
+                            <label for="menu1-server-dev">개발</label>
+                            <input type="radio" id="menu1-server-all" name="menu1-server" value="모두" required>
+                            <label for="menu1-server-all">모두</label>
+                        </div>
+                    </div>
+
+                    <div class="button-group">
+                        <button type="button" class="button primary" onclick="menu1App.goToScreen2()">요청서 내용 생성하기</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Menu 1 - Screen 2: 결과 -->
+        <div id="page-menu1-screen2" class="page">
+            <button class="back-button" onclick="app.goToPage('menu1-screen1')">← 이전</button>
+
+            <div class="header menu6">
+                <h1>요청서 생성</h1>
+            </div>
+
+            <!-- Notice Box with Link -->
+            <div style="max-width: 800px; margin: 0 auto 24px; display: flex; align-items: center; gap: 16px; padding: 16px; background: #f0f4ff; border-radius: 8px;">
+                <div style="flex: 1; font-size: 14px; color: #1a1a1a;">
+                    플레인 > <span style="font-weight: 600; color: #ef4444;">서비스기획팀_권한요청</span> 프로젝트 가입이 필요합니다
+                </div>
+                <a href="https://project.cowave.kr/danawa/projects/ce5cce0a-b306-4e83-84df-b86f384f21ec/issues/" target="_blank"
+                   style="display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; padding: 10px 16px; background: #6366f1; color: #ffffff; border-radius: 6px; text-decoration: none; font-size: 13px; font-weight: 600;">
+                    프로젝트 가입하기 →
+                </a>
+            </div>
+
+            <div class="form-wrapper">
+                <!-- Title Box -->
+                <div style="position: relative; margin-bottom: 24px;">
+                    <div style="background: #6366f1; border-radius: 8px; padding: 20px; word-break: break-word;">
+                        <div id="menu1-result-title" style="font-weight: 600; color: #ffffff; font-size: 16px; line-height: 1.5;"></div>
+                    </div>
+                    <button type="button" class="button" style="position: absolute; top: 12px; right: 12px; padding: 6px 12px; font-size: 12px; background-color: #ffffff; color: #6366f1; border: 1px solid #6366f1;" onclick="menu1App.copyToClipboard('title')">복사</button>
+                </div>
+
+                <!-- Content Box -->
+                <div style="position: relative; margin-bottom: 32px;">
+                    <div style="background: #f3f4f6; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; word-break: break-word;">
+                        <pre id="menu1-result-content" style="font-size: 13px; color: #1a1a1a; font-family: monospace; white-space: pre-wrap; line-height: 1.6;"></pre>
+                    </div>
+                    <button type="button" class="button" style="position: absolute; top: 12px; right: 12px; padding: 6px 12px; font-size: 12px; background-color: #6366f1; color: #ffffff;" onclick="menu1App.copyToClipboard('content')">복사</button>
+                </div>
+
+                <div class="button-group">
+                    <button type="button" class="button primary" onclick="app.goToPage('main')" style="width: 100%;">메인으로 돌아가기</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Menu 2 - Screen 1: 기존 관리자 권한 부여 입력 -->
+        <div id="page-menu2-screen1" class="page">
+            <button class="back-button" onclick="app.goToPage('main')">← 돌아가기</button>
+
+            <div class="header menu6">
+                <h1>기존 관리자 권한 요청</h1>
+            </div>
+
+            <div class="form-wrapper">
+                <!-- Notice Box with Link -->
+                <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 24px; padding: 16px; background: #f0f4ff; border-radius: 8px;">
+                    <div style="flex: 1; font-size: 14px; color: #1a1a1a;">
+                        플레인 > <span style="font-weight: 600; color: #ef4444;">서비스기획팀_권한요청</span> 프로젝트 가입이 필요합니다
+                    </div>
+                    <a href="https://project.cowave.kr/danawa/projects/ce5cce0a-b306-4e83-84df-b86f384f21ec/issues/" target="_blank"
+                       style="display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; padding: 10px 16px; background: #6366f1; color: #ffffff; border-radius: 6px; text-decoration: none; font-size: 13px; font-weight: 600;">
+                        프로젝트 가입하기 →
+                    </a>
+                </div>
+
+                <div class="divider"></div>
+
+                <form id="menu2-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>요청자명 <span class="required">*</span></label>
+                            <input type="text" id="menu2-requester" placeholder="예: 홍길동" required>
+                        </div>
+                        <div class="form-group">
+                            <label>팀명 <span class="required">*</span></label>
+                            <input type="text" id="menu2-team" placeholder="예: 서비스기획팀" required>
+                        </div>
+                    </div>
+
+                    <p class="muted-text">* 문의 시 신속한 확인을 위해 권한을 부여 받을 대상자가 요청하는 것을 원칙으로 합니다.</p>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>권한 부여 대상자 이름 <span class="required">*</span></label>
+                            <input type="text" id="menu2-target-name" placeholder="예: 홍길동" required onfocus="if(!this.value) this.value=document.getElementById('menu2-requester').value;">
+                        </div>
+                        <div class="form-group">
+                            <label>권한 부여 대상자 팀명 <span class="required">*</span></label>
+                            <input type="text" id="menu2-target-team" placeholder="예: 서비스기획팀" required onfocus="if(!this.value) this.value=document.getElementById('menu2-team').value;">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>권한 부여 대상자 사번 <span class="required">*</span></label>
+                        <input type="text" id="menu2-target-id" placeholder="예: 12345" required>
+                    </div>
+
+                    <div class="form-group form-row full">
+                        <label>필요 권한 <span class="required">*</span></label>
+                        <textarea id="menu2-permissions" placeholder="필요한 권한을 입력해주세요." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>서버 <span class="required">*</span></label>
+                        <div class="segmented-control">
+                            <input type="radio" id="menu2-server-prod" name="menu2-server" value="운영" required>
+                            <label for="menu2-server-prod">운영</label>
+                            <input type="radio" id="menu2-server-dev" name="menu2-server" value="개발" required>
+                            <label for="menu2-server-dev">개발</label>
+                            <input type="radio" id="menu2-server-all" name="menu2-server" value="모두" required>
+                            <label for="menu2-server-all">모두</label>
+                        </div>
+                    </div>
+
+                    <div class="button-group">
+                        <button type="button" class="button primary" onclick="menu2App.goToScreen2()">요청서 내용 생성하기</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Menu 2 - Screen 2: 결과 -->
+        <div id="page-menu2-screen2" class="page">
+            <button class="back-button" onclick="app.goToPage('menu2-screen1')">← 이전</button>
+
+            <div class="header menu6">
+                <h1>요청서 생성</h1>
+            </div>
+
+            <!-- Notice Box with Link -->
+            <div style="max-width: 800px; margin: 0 auto 24px; display: flex; align-items: center; gap: 16px; padding: 16px; background: #f0f4ff; border-radius: 8px;">
+                <div style="flex: 1; font-size: 14px; color: #1a1a1a;">
+                    플레인 > <span style="font-weight: 600; color: #ef4444;">서비스기획팀_권한요청</span> 프로젝트 가입이 필요합니다
+                </div>
+                <a href="https://project.cowave.kr/danawa/projects/ce5cce0a-b306-4e83-84df-b86f384f21ec/issues/" target="_blank"
+                   style="display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; padding: 10px 16px; background: #6366f1; color: #ffffff; border-radius: 6px; text-decoration: none; font-size: 13px; font-weight: 600;">
+                    프로젝트 가입하기 →
+                </a>
+            </div>
+
+            <div class="form-wrapper">
+                <!-- Title Box -->
+                <div style="position: relative; margin-bottom: 24px;">
+                    <div style="background: #6366f1; border-radius: 8px; padding: 20px; word-break: break-word;">
+                        <div id="menu2-result-title" style="font-weight: 600; color: #ffffff; font-size: 16px; line-height: 1.5;"></div>
+                    </div>
+                    <button type="button" class="button" style="position: absolute; top: 12px; right: 12px; padding: 6px 12px; font-size: 12px; background-color: #ffffff; color: #6366f1; border: 1px solid #6366f1;" onclick="menu2App.copyToClipboard('title')">복사</button>
+                </div>
+
+                <!-- Content Box -->
+                <div style="position: relative; margin-bottom: 32px;">
+                    <div style="background: #f3f4f6; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; word-break: break-word;">
+                        <pre id="menu2-result-content" style="font-size: 13px; color: #1a1a1a; font-family: monospace; white-space: pre-wrap; line-height: 1.6;"></pre>
+                    </div>
+                    <button type="button" class="button" style="position: absolute; top: 12px; right: 12px; padding: 6px 12px; font-size: 12px; background-color: #6366f1; color: #ffffff;" onclick="menu2App.copyToClipboard('content')">복사</button>
+                </div>
+
+                <div class="button-group">
+                    <button type="button" class="button primary" onclick="app.goToPage('main')" style="width: 100%;">메인으로 돌아가기</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Menu 3 - 문의사항 (FAQ) -->
+        <div id="page-menu3" class="page">
+            <button class="back-button" onclick="app.goToPage('main')">← 돌아가기</button>
+
+            <div class="header">
+                <h1>문의사항 (FAQ)</h1>
+                <p>자주 묻는 질문과 답변입니다. 질문을 클릭하면 답변을 확인할 수 있습니다.</p>
+            </div>
+
+            <div class="form-wrapper">
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <!-- FAQ Item 1 -->
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+                            <span class="faq-icon">▶</span>
+                            <span>비밀번호를 변경하고 싶어요.</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>• 비밀번호는 비밀번호 찾기를 통해 직접 변경해 주셔야 하며, 이메일 주소 변경은 가능합니다.</p>
+                            <p>• 비밀번호 5회 이상 실패 이력 삭제는 메신저로 요청주세요.</p>
+                        </div>
+                    </div>
+
+                    <!-- FAQ Item 2 -->
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+                            <span class="faq-icon">▶</span>
+                            <span>사업자 회원 권한 추가 부탁드립니다.</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>• 일반회원 로그인 후 회원정보 수정 페이지의 '사업자회원으로 전환하기'를 통해 진행 부탁드립니다.</p>
+                            <p style="margin-top: 8px;"><a href="https://auth.danawa.com/convertMember" target="_blank" style="color: #6366f1; text-decoration: underline; font-weight: 500;">https://auth.danawa.com/convertMember</a></p>
+                            <p style="margin-top: 8px;">• <span style="color: #ef4444;">*</span>사업자 권한을 부여하여도 사업자등록번호 체크에서 걸리기 때문에 전환 절차를 통해 진행해주세요.</p>
+                            <p>• 사업자 정보는 다나와 메인페이지 하단의 커넥트웨이브 정보를 입력하시면 됩니다.</p>
+                        </div>
+                    </div>
+
+                    <!-- FAQ Item 3 -->
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+                            <span class="faq-icon">▶</span>
+                            <span>2차 인증 시 '인증된 메일 주소가 아닙니다' 알럿 노출</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>• 해당 일자에 미사용 권한 복구 등 메일 인증 진행한 이력이 있는 경우</p>
+                            <p style="margin-top: 8px;">→ 해당 내용으로 권한 요청 프로젝트에 요청서 등록 필요</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -782,19 +1176,20 @@
             <button class="back-button" onclick="app.goToPage('main')">← 돌아가기</button>
 
             <div class="header menu6">
-                <h1>통합 관리자 권한 부여</h1>
+                <h1>통합 관리자 권한 요청</h1>
             </div>
 
             <div class="form-wrapper">
-                <!-- Notice Box -->
-                <div class="info-box">
-                    플레인 > 서비스기획팀_권한 요청 프로젝트 가입이 필요합니다
+                <!-- Notice Box with Link -->
+                <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 24px; padding: 16px; background: #f0f4ff; border-radius: 8px;">
+                    <div style="flex: 1; font-size: 14px; color: #1a1a1a;">
+                        플레인 > <span style="font-weight: 600; color: #ef4444;">서비스기획팀_권한요청</span> 프로젝트 가입이 필요합니다
+                    </div>
+                    <a href="https://project.cowave.kr/danawa/projects/ce5cce0a-b306-4e83-84df-b86f384f21ec/issues/" target="_blank"
+                       style="display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; padding: 10px 16px; background: #6366f1; color: #ffffff; border-radius: 6px; text-decoration: none; font-size: 13px; font-weight: 600;">
+                        프로젝트 가입하기 →
+                    </a>
                 </div>
-
-                <a href="https://project.cowave.kr/danawa/projects/ce5cce0a-b306-4e83-84df-b86f384f21ec/issues/" target="_blank"
-                   style="display: inline-block; margin-bottom: 24px; padding: 12px 16px; background: #6366f1; color: #ffffff; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 500;">
-                    프로젝트 가입하기 →
-                </a>
 
                 <div class="divider"></div>
 
@@ -911,6 +1306,16 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Custom Alert -->
+            <div id="menu4-custom-alert" style="position: fixed; top: 20px; right: 20px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; max-width: 300px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); z-index: 2000; display: none;">
+                <div style="display: flex; align-items: flex-start; gap: 12px;">
+                    <div style="flex: 1;">
+                        <div id="menu4-alert-message" style="font-size: 14px; color: #1a1a1a; line-height: 1.5;"></div>
+                    </div>
+                    <button type="button" style="background: none; border: none; font-size: 20px; color: #999999; cursor: pointer; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;" onclick="document.getElementById('menu4-custom-alert').style.display = 'none';">×</button>
+                </div>
+            </div>
         </div>
 
         <!-- Menu 5 - Screen 1: Basic Info + Tree Builder -->
@@ -924,16 +1329,18 @@
             <div class="form-wrapper">
                 <form id="menu5-form-screen1">
                     <!-- Basic Info Section -->
-                    <div class="form-group">
-                        <label>요청자명 <span class="required">*</span></label>
-                        <input type="text" id="menu5-requester" placeholder="예: 홍길동" required>
-                    </div>
-
                     <div class="form-row">
+                        <div class="form-group">
+                            <label>요청자명 <span class="required">*</span></label>
+                            <input type="text" id="menu5-requester" placeholder="예: 홍길동" required>
+                        </div>
                         <div class="form-group">
                             <label>팀명 <span class="required">*</span></label>
                             <input type="text" id="menu5-team" placeholder="예: 개발팀" required>
                         </div>
+                    </div>
+
+                    <div class="form-row">
                         <div class="form-group">
                             <label>통합 관리자 <span class="required">*</span></label>
                             <div class="segmented-control">
@@ -943,17 +1350,14 @@
                                 <label for="menu5-admin-danawa">다나와</label>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>서버 <span class="required">*</span></label>
-                        <div class="segmented-control">
-                            <input type="radio" id="menu5-server-prod" name="menu5-server" value="운영" required>
-                            <label for="menu5-server-prod">운영</label>
-                            <input type="radio" id="menu5-server-dev" name="menu5-server" value="개발" required>
-                            <label for="menu5-server-dev">개발</label>
-                            <input type="radio" id="menu5-server-all" name="menu5-server" value="모두" required>
-                            <label for="menu5-server-all">모두</label>
+                        <div class="form-group">
+                            <label>서버 <span class="required">*</span></label>
+                            <div class="segmented-control">
+                                <input type="radio" id="menu5-server-prod" name="menu5-server" value="운영" required>
+                                <label for="menu5-server-prod">운영</label>
+                                <input type="radio" id="menu5-server-dev" name="menu5-server" value="개발" required>
+                                <label for="menu5-server-dev">개발</label>
+                            </div>
                         </div>
                     </div>
 
@@ -1000,14 +1404,23 @@
             </div>
 
             <div class="form-wrapper">
-                <p style="font-size: 14px; color: #666666; margin-bottom: 24px;">아래 내용을 복사하여 권한 담당자에게 전달하세요.</p>
+                <!-- Notice Box with Link -->
+                <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 24px; padding: 16px; background: #f0f4ff; border-radius: 8px;">
+                    <div style="flex: 1; font-size: 14px; color: #1a1a1a;">
+                        플레인 > <span style="font-weight: 600; color: #ef4444;">서비스기획팀_권한요청</span> 프로젝트 가입이 필요합니다
+                    </div>
+                    <a href="https://project.cowave.kr/danawa/projects/ce5cce0a-b306-4e83-84df-b86f384f21ec/issues/" target="_blank"
+                       style="display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; padding: 10px 16px; background: #6366f1; color: #ffffff; border-radius: 6px; text-decoration: none; font-size: 13px; font-weight: 600;">
+                        프로젝트 가입하기 →
+                    </a>
+                </div>
 
                 <!-- Title Box -->
-                <div style="position: relative; margin-bottom: 20px;">
-                    <div style="background: #f3f4f6; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; word-break: break-word;">
-                        <div id="menu5-result-title" style="font-weight: 500; color: #1a1a1a;"></div>
+                <div style="position: relative; margin-bottom: 24px;">
+                    <div style="background: #6366f1; border-radius: 8px; padding: 20px; word-break: break-word;">
+                        <div id="menu5-result-title" style="font-weight: 600; color: #ffffff; font-size: 16px; line-height: 1.5;"></div>
                     </div>
-                    <button type="button" class="button" style="position: absolute; top: 12px; right: 12px; padding: 6px 12px; font-size: 12px; background-color: #6366f1; color: #ffffff;" onclick="menu5App.copyToClipboard('title')">복사</button>
+                    <button type="button" class="button" style="position: absolute; top: 12px; right: 12px; padding: 6px 12px; font-size: 12px; background-color: #ffffff; color: #6366f1; border: 1px solid #6366f1;" onclick="menu5App.copyToClipboard('title')">복사</button>
                 </div>
 
                 <!-- Content Box -->
@@ -1017,8 +1430,6 @@
                     </div>
                     <button type="button" class="button" style="position: absolute; top: 12px; right: 12px; padding: 6px 12px; font-size: 12px; background-color: #6366f1; color: #ffffff;" onclick="menu5App.copyToClipboard('content')">복사</button>
                 </div>
-
-                <p style="font-size: 13px; color: #888888; text-align: center;">위 내용을 복사하여 권한 담당자에게 전달해주세요.</p>
 
                 <div class="button-group">
                     <button type="button" class="button primary" onclick="app.goToPage('main')" style="width: 100%;">메인으로 돌아가기</button>
@@ -1094,14 +1505,7 @@
         };
 
         // Menu card click handlers
-        document.querySelectorAll('.menu-card').forEach((card, index) => {
-            if (index < 4) {
-                card.style.cursor = 'pointer';
-                card.addEventListener('click', () => {
-                    alert(`메뉴 ${index + 1}은 아직 개발 중입니다.`);
-                });
-            }
-        });
+        // 알럿 제거됨
 
         // Prevent OTP checkbox from being unchecked
         const otpCheckbox = document.getElementById('otp-check');
@@ -1164,9 +1568,9 @@
                         <input type="text" class="tree-item-input" placeholder="메뉴명" value="${item.name}"
                             onchange="menu5App.updateTreeItem(${item.id}, 'name', this.value)">
                         <button type="button" class="tree-item-button" ${item.depth === 4 ? 'disabled' : ''}
-                            onclick="menu5App.changeDepth(${item.id}, 'up')">뎁스↑</button>
+                            onclick="menu5App.changeDepth(${item.id}, 'up')">뎁스→</button>
                         <button type="button" class="tree-item-button" ${item.depth === 1 ? 'disabled' : ''}
-                            onclick="menu5App.changeDepth(${item.id}, 'down')">뎁스↓</button>
+                            onclick="menu5App.changeDepth(${item.id}, 'down')">뎁스←</button>
                         <button type="button" class="tree-item-delete" onclick="menu5App.deleteTreeItem(${item.id})">🗑</button>
                     </div>
                 `).join('');
@@ -1178,9 +1582,10 @@
             },
 
             goToScreen2() {
-                if (!this.validateScreen1()) return;
                 this.saveFormData();
+                if (!this.validateScreen1()) return;
                 this.renderDetailCards();
+                this.updateAdminLink();
                 app.goToPage('menu5-screen2');
             },
 
@@ -1226,6 +1631,31 @@
             },
 
             renderDetailCards() {
+                // 각 항목의 active 기본값을 Y로 초기화, order 자동 계산
+                this.state.treeItems.forEach((item, index) => {
+                    if (!this.state.details[item.id]) {
+                        this.state.details[item.id] = {};
+                    }
+                    if (!this.state.details[item.id].active) {
+                        this.state.details[item.id].active = 'Y';
+                    }
+                    // order 기본값을 같은 depth의 순서로 자동 계산
+                    if (!this.state.details[item.id].order) {
+                        if (item.depth === 1) {
+                            // 1Depth: 같은 depth 내에서의 위치
+                            const sameDepthIndex = this.state.treeItems
+                                .filter((i, idx) => idx <= index && i.depth === 1)
+                                .length;
+                            this.state.details[item.id].order = sameDepthIndex.toString();
+                        } else {
+                            // 2Depth 이상: 같은 부모 내에서의 위치
+                            const parentName = this.getParentName(item, index);
+                            const childIndex = this.getChildIndex(item, index);
+                            this.state.details[item.id].order = childIndex.toString();
+                        }
+                    }
+                });
+
                 const container = document.getElementById('menu5-detail-cards-container');
                 container.innerHTML = this.state.treeItems.map((item, index) => {
                     const parentName = item.depth > 1 ? this.getParentName(item, index) : '';
@@ -1234,7 +1664,7 @@
                         : `[${item.depth}Depth] ${item.name} (${parentName} 하위 · ${this.getChildIndex(item, index)}번째)`;
 
                     return `
-                        <div class="menu5-detail-card">
+                        <div class="menu5-detail-card menu5-detail-card--depth-${item.depth}" data-item-id="${item.id}">
                             <div class="menu5-detail-card-header">${headerText}</div>
 
                             <div class="menu5-detail-field-group">
@@ -1279,12 +1709,52 @@
                             <div class="menu5-detail-field-group">
                                 <label class="menu5-detail-field-label">메뉴 순서</label>
                                 <input type="text" class="menu5-detail-field-input"
-                                    value="${this.state.details[item.id]?.order || (item.depth === 1 ? 'last' : '')}"
+                                    value="${this.state.details[item.id]?.order || ''}"
                                     onchange="menu5App.updateDetailField(${item.id}, 'order', this.value)">
+                                <p style="font-size: 12px; color: #555555; margin-top: 6px;">*마지막 순서를 원할 경우, last로 입력해주세요.</p>
                             </div>
                         </div>
                     `;
                 }).join('');
+            },
+
+            updateAdminLink() {
+                const admin = this.state.admin;
+                const server = this.state.server;
+
+                let url = '';
+
+                if (admin === '다누리') {
+                    if (server === '운영') {
+                        url = 'https://adm.danuricorp.com';
+                    } else if (server === '개발') {
+                        url = 'https://dev-adm.danuricorp.com';
+                    }
+                } else if (admin === '다나와') {
+                    if (server === '운영') {
+                        url = 'https://adm.danawacorp.com';
+                    } else if (server === '개발') {
+                        url = 'https://dev-adm.danawacorp.com';
+                    }
+                }
+
+                // 1Depth 항목들의 도메인 입력칸을 자동으로 채움
+                if (url) {
+                    this.state.treeItems.forEach(item => {
+                        if (item.depth === 1) {
+                            // State 업데이트
+                            this.updateDetailField(item.id, 'domain', url);
+                            // DOM 입력칸의 value 직접 업데이트
+                            const detailCard = document.querySelector(`[data-item-id="${item.id}"]`);
+                            if (detailCard) {
+                                const domainInput = detailCard.querySelector('input[placeholder="http://"]');
+                                if (domainInput) {
+                                    domainInput.value = url;
+                                }
+                            }
+                        }
+                    });
+                }
             },
 
             getParentName(item, currentIndex) {
@@ -1314,6 +1784,20 @@
                     this.state.details[id] = {};
                 }
                 this.state.details[id][field] = value;
+
+                // active 필드 업데이트 시 버튼 클래스 업데이트
+                if (field === 'active') {
+                    const detailCard = document.querySelector(`[data-item-id="${id}"]`);
+                    if (detailCard) {
+                        const buttons = detailCard.querySelectorAll('.menu5-detail-toggle-button');
+                        buttons.forEach(btn => btn.classList.remove('active'));
+                        if (value === 'Y') {
+                            buttons[0]?.classList.add('active');
+                        } else if (value === 'N') {
+                            buttons[1]?.classList.add('active');
+                        }
+                    }
+                }
             },
 
             saveDetailData() {
@@ -1323,7 +1807,7 @@
             generateResult() {
                 const serverDisplay = this.state.server === '모두' ? '운영/개발' : this.state.server;
 
-                const title = `[${this.state.team}] ${this.state.admin} ${serverDisplay} 필요 권한/서비스 메뉴 추가 요청`;
+                const title = `[${this.state.team}] ${this.state.admin} 통합관리자 ${serverDisplay} 메뉴 추가 요청`;
 
                 let treeStructure = this.buildTreeStructure();
                 let menuSettings = this.buildMenuSettings();
@@ -1400,7 +1884,7 @@ ${menuSettings}`;
                 }
 
                 navigator.clipboard.writeText(text).then(() => {
-                    alert('복사됨 ✓');
+                    alert('복사 되었습니다. 요청서에 붙여넣기 해주세요.');
                 }).catch(() => {
                     alert('복사 실패');
                 });
@@ -1414,6 +1898,193 @@ ${menuSettings}`;
                 cards[4].style.cursor = 'pointer';
             }
         });
+
+        // Menu 1 Application
+        const menu1App = {
+            state: {
+                requester: '',
+                team: '',
+                server: '',
+                targetTeam: '',
+                targetName: '',
+                targetId: '',
+                targetEmail: '',
+                permissions: ''
+            },
+
+            goToScreen2() {
+                this.saveFormData();
+                if (!this.validateForm()) return;
+                this.generateResult();
+                app.goToPage('menu1-screen2');
+            },
+
+            saveFormData() {
+                this.state.requester = document.getElementById('menu1-requester').value;
+                this.state.team = document.getElementById('menu1-team').value;
+                this.state.server = document.querySelector('input[name="menu1-server"]:checked')?.value || '';
+                this.state.targetTeam = document.getElementById('menu1-target-team').value;
+                this.state.targetName = document.getElementById('menu1-target-name').value;
+                this.state.targetId = document.getElementById('menu1-target-id').value;
+                this.state.targetEmail = document.getElementById('menu1-target-email').value;
+                this.state.permissions = document.getElementById('menu1-permissions').value;
+            },
+
+            validateForm() {
+                if (!document.getElementById('menu1-requester').value.trim()) {
+                    alert('요청자명을 입력해주세요');
+                    return false;
+                }
+                if (!document.getElementById('menu1-team').value.trim()) {
+                    alert('팀명을 입력해주세요');
+                    return false;
+                }
+                if (!document.querySelector('input[name="menu1-server"]:checked')) {
+                    alert('서버를 선택해주세요');
+                    return false;
+                }
+                if (!document.getElementById('menu1-target-team').value.trim()) {
+                    alert('권한 부여 대상자 팀명을 입력해주세요');
+                    return false;
+                }
+                if (!document.getElementById('menu1-target-name').value.trim()) {
+                    alert('권한 부여 대상자 이름을 입력해주세요');
+                    return false;
+                }
+                if (!document.getElementById('menu1-target-id').value.trim()) {
+                    alert('권한 부여 대상자 사번을 입력해주세요');
+                    return false;
+                }
+                if (!document.getElementById('menu1-target-email').value.trim()) {
+                    alert('권한 부여 대상자 이메일을 입력해주세요');
+                    return false;
+                }
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(document.getElementById('menu1-target-email').value.trim())) {
+                    alert('이메일 주소를 확인해주세요.');
+                    return false;
+                }
+                if (!document.getElementById('menu1-permissions').value.trim()) {
+                    alert('필요 권한을 입력해주세요');
+                    return false;
+                }
+                return true;
+            },
+
+            generateResult() {
+                const title = `[${this.state.team}] 권한 요청`;
+
+                const serverDisplay = this.state.server === '모두' ? '운영/개발' : this.state.server;
+                const content = `요청자명: ${this.state.requester}
+서버: ${serverDisplay}
+대상자: ${this.state.targetTeam} ${this.state.targetName} (${this.state.targetId}) / ${this.state.targetEmail}
+필요 권한: ${this.state.permissions}`;
+
+                document.getElementById('menu1-result-title').textContent = title;
+                document.getElementById('menu1-result-content').textContent = content;
+            },
+
+            copyToClipboard(type) {
+                let text = '';
+                if (type === 'title') {
+                    text = document.getElementById('menu1-result-title').textContent;
+                } else {
+                    text = document.getElementById('menu1-result-content').textContent;
+                }
+
+                navigator.clipboard.writeText(text).then(() => {
+                    alert('복사 되었습니다. 요청서에 붙여넣기 해주세요.');
+                });
+            }
+        };
+
+        // Menu 2 Application
+        const menu2App = {
+            state: {
+                requester: '',
+                team: '',
+                server: '',
+                targetName: '',
+                targetTeam: '',
+                targetId: '',
+                permissions: ''
+            },
+
+            goToScreen2() {
+                this.saveFormData();
+                if (!this.validateForm()) return;
+                this.generateResult();
+                app.goToPage('menu2-screen2');
+            },
+
+            saveFormData() {
+                this.state.requester = document.getElementById('menu2-requester').value;
+                this.state.team = document.getElementById('menu2-team').value;
+                this.state.server = document.querySelector('input[name="menu2-server"]:checked')?.value || '';
+                this.state.targetName = document.getElementById('menu2-target-name').value;
+                this.state.targetTeam = document.getElementById('menu2-target-team').value;
+                this.state.targetId = document.getElementById('menu2-target-id').value;
+                this.state.permissions = document.getElementById('menu2-permissions').value;
+            },
+
+            validateForm() {
+                if (!document.getElementById('menu2-requester').value.trim()) {
+                    alert('요청자명을 입력해주세요');
+                    return false;
+                }
+                if (!document.getElementById('menu2-team').value.trim()) {
+                    alert('팀명을 입력해주세요');
+                    return false;
+                }
+                if (!document.querySelector('input[name="menu2-server"]:checked')) {
+                    alert('서버를 선택해주세요');
+                    return false;
+                }
+                if (!document.getElementById('menu2-target-name').value.trim()) {
+                    alert('권한 부여 대상자 이름을 입력해주세요');
+                    return false;
+                }
+                if (!document.getElementById('menu2-target-team').value.trim()) {
+                    alert('권한 부여 대상자 팀명을 입력해주세요');
+                    return false;
+                }
+                if (!document.getElementById('menu2-target-id').value.trim()) {
+                    alert('권한 부여 대상자 사번을 입력해주세요');
+                    return false;
+                }
+                if (!document.getElementById('menu2-permissions').value.trim()) {
+                    alert('필요 권한을 입력해주세요');
+                    return false;
+                }
+                return true;
+            },
+
+            generateResult() {
+                const title = `[${this.state.team}] 필요 권한 내용 요약`;
+
+                const serverDisplay = this.state.server === '모두' ? '운영/개발' : this.state.server;
+                const content = `요청자명: ${this.state.requester}
+서버: ${serverDisplay}
+대상자: ${this.state.targetTeam} ${this.state.targetName} (${this.state.targetId})
+필요 권한: ${this.state.permissions}`;
+
+                document.getElementById('menu2-result-title').textContent = title;
+                document.getElementById('menu2-result-content').textContent = content;
+            },
+
+            copyToClipboard(type) {
+                let text = '';
+                if (type === 'title') {
+                    text = document.getElementById('menu2-result-title').textContent;
+                } else {
+                    text = document.getElementById('menu2-result-content').textContent;
+                }
+
+                navigator.clipboard.writeText(text).then(() => {
+                    alert('복사 되었습니다. 요청서에 붙여넣기 해주세요.');
+                });
+            }
+        };
 
         // Menu 4 Application
         const menu4App = {
@@ -1459,10 +2130,6 @@ ${menuSettings}`;
             },
 
             validateForm() {
-                if (!this.state.requester.trim()) {
-                    alert('요청자명을 입력해주세요');
-                    return false;
-                }
                 if (!document.getElementById('menu4-requester').value.trim()) {
                     alert('요청자명을 입력해주세요');
                     return false;
@@ -1514,11 +2181,23 @@ ${menuSettings}`;
             },
 
             handleLogin(didLogin) {
+                // Show custom alert
+                const alertBox = document.getElementById('menu4-custom-alert');
+                const alertMessage = document.getElementById('menu4-alert-message');
+
                 if (didLogin) {
-                    app.goToPage('menu6');
+                    alertMessage.textContent = '✓ 로그인 확인이 완료되었습니다.';
                 } else {
-                    app.goToPage('menu6');
+                    alertMessage.textContent = '다음 링크를 참고하여 로그인 방법을 확인해주세요.';
                 }
+
+                alertBox.style.display = 'block';
+
+                // Auto hide and navigate after 5 seconds
+                setTimeout(() => {
+                    alertBox.style.display = 'none';
+                    app.goToPage('menu6');
+                }, 5000);
             }
         };
     </script>
