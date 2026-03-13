@@ -5,6 +5,9 @@ exports.handler = async (event) => {
         const data = JSON.parse(event.body);
         const { admin, server, teamName, userName, requestLink } = data;
 
+        // Get current date in YYYY-MM-DD format
+        const today = new Date().toISOString().split('T')[0];
+
         // Create page in Notion database
         const response = await fetch('https://api.notion.com/v1/pages', {
             method: 'POST',
@@ -16,11 +19,12 @@ exports.handler = async (event) => {
             body: JSON.stringify({
                 parent: { database_id: 'b2b3328e-ffb1-4932-a5c2-2b090ad922fc' },
                 properties: {
-                    'Name': { title: [{ text: { content: `${teamName} ${userName}` } }] },
+                    '이름': { title: [{ text: { content: userName } }] },
+                    '팀명': { rich_text: [{ text: { content: teamName } }] },
                     '통합관리자': { select: { name: admin } },
                     '서버': { select: { name: server } },
-                    '팀명': { rich_text: [{ text: { content: teamName } }] },
-                    '이름': { rich_text: [{ text: { content: userName } }] },
+                    '관련 요청서 링크': { url: requestLink || null },
+                    '접수 일시': { date: { start: today } },
                 },
             }),
         });
