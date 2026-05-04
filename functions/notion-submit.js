@@ -46,18 +46,38 @@ exports.handler = async (event) => {
 팀명: ${teamName} / 이름: ${userName}`;
 
             // Add comment to the page
-            await fetch(`https://api.notion.com/v1/comments`, {
+            console.log('💬 Attempting to add comment...');
+            console.log('📍 Attempting to comment on pageId:', pageId);
+
+            const commentBody = {
+                rich_text: [{
+                    type: 'text',
+                    text: {
+                        content: commentText
+                    }
+                }]
+            };
+            console.log('📝 Comment payload:', JSON.stringify(commentBody));
+
+            const commentResponse = await fetch(`https://api.notion.com/v1/blocks/${pageId}/comments`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${process.env.NOTION_API_KEY}`,
                     'Content-Type': 'application/json',
-                    'Notion-Version': '2022-06-28',
+                    'Notion-Version': '2024-04-15',
                 },
-                body: JSON.stringify({
-                    parent: { page_id: pageId },
-                    rich_text: [{ text: { content: commentText } }],
-                }),
+                body: JSON.stringify(commentBody),
             });
+
+            console.log('💬 Comment API Response:', commentResponse.status, commentResponse.statusText);
+
+            if (commentResponse.ok) {
+                const commentData = await commentResponse.json();
+                console.log('✅ Comment added successfully:', commentData.id);
+            } else {
+                const commentError = await commentResponse.text();
+                console.error('⚠️ Comment addition failed (Status:', commentResponse.status, '):', commentError);
+            }
         }
 
         if (!response.ok) {
