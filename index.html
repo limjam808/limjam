@@ -1970,6 +1970,10 @@ ${menuSettings}`;
                         if (radio) radio.checked = true;
                     }
                     localStorage.removeItem('menu1_draft');
+                    if (localStorage.getItem('menu1_autosubmit')) {
+                        localStorage.removeItem('menu1_autosubmit');
+                        setTimeout(() => this.goToScreen2(), 300);
+                    }
                 } catch(e) {}
             },
 
@@ -1999,30 +2003,54 @@ ${menuSettings}`;
                 if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = '등록 중...'; }
 
                 try {
-                    const res = await fetch('/.netlify/functions/plane-submit', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ title, content, targetEmail: this.state.targetEmail }),
-                    });
-                    const result = await res.json();
+                    const today = new Date().toISOString().split('T')[0];
+                    const res = await fetch(
+                        'https://project.cowave.kr/api/v1/workspaces/danawa/projects/ce5cce0a-b306-4e83-84df-b86f384f21ec/issues/',
+                        {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            credentials: 'include',
+                            body: JSON.stringify({
+                                name: title,
+                                description_html: `<p>${content.replace(/\n/g, '<br/>')}</p>`,
+                                label_ids: ['e18f8084-7cde-45fe-81af-35ee51c807b4', '40b81558-d372-41ae-9c2e-57d755676e82'],
+                                assignees: ['2a628ffe-eb35-411f-a26f-0d6c2cca2c58'],
+                                start_date: today,
+                                priority: 'medium',
+                            }),
+                        }
+                    );
 
-                    if (result.success) {
-                        // 성공: 성공 화면으로 이동
+                    if (res.ok) {
+                        const issue = await res.json();
+                        const issueUrl = `https://project.cowave.kr/danawa/projects/ce5cce0a-b306-4e83-84df-b86f384f21ec/issues/${issue.id}`;
                         const linkEl = document.getElementById('menu1-issue-link');
-                        if (linkEl && result.issueUrl) {
-                            linkEl.innerHTML = `<a href="${result.issueUrl}" target="_blank"
+                        if (linkEl) {
+                            linkEl.innerHTML = `<a href="${issueUrl}" target="_blank"
                                 style="color: #6366f1; font-size: 14px; text-decoration: underline;">
                                 → Plane에서 요청서 확인하기</a>`;
                         }
+                        localStorage.removeItem('menu1_draft');
+                        localStorage.removeItem('menu1_autosubmit');
                         app.goToPage('menu1-success');
                     } else {
-                        // 실패: screen2로 이동 (로그인 배너 표시)
+                        // 로그인 안됨 - 초대 처리 후 로그인 배너
+                        await fetch('/.netlify/functions/plane-invite', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ targetEmail: this.state.targetEmail }),
+                        }).catch(() => {});
                         const banner = document.getElementById('menu1-login-banner');
                         if (banner) banner.style.display = 'flex';
                         app.goToPage('menu1-screen2');
                     }
                 } catch(e) {
-                    // 네트워크 오류: screen2로 이동
+                    // CORS 오류 등 - 초대 처리 후 로그인 배너
+                    await fetch('/.netlify/functions/plane-invite', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ targetEmail: this.state.targetEmail }),
+                    }).catch(() => {});
                     const banner = document.getElementById('menu1-login-banner');
                     if (banner) banner.style.display = 'flex';
                     app.goToPage('menu1-screen2');
@@ -2033,6 +2061,7 @@ ${menuSettings}`;
 
             goToPlaneLogin() {
                 this.saveToStorage();
+                localStorage.setItem('menu1_autosubmit', '1');
                 window.location.href = 'https://project.cowave.kr/danawa/';
             },
 
@@ -2139,6 +2168,10 @@ ${menuSettings}`;
                         if (radio) radio.checked = true;
                     }
                     localStorage.removeItem('menu2_draft');
+                    if (localStorage.getItem('menu2_autosubmit')) {
+                        localStorage.removeItem('menu2_autosubmit');
+                        setTimeout(() => this.goToScreen2(), 300);
+                    }
                 } catch(e) {}
             },
 
@@ -2166,24 +2199,35 @@ ${menuSettings}`;
                 if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = '등록 중...'; }
 
                 try {
-                    const res = await fetch('/.netlify/functions/plane-submit', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            title,
-                            content,
-                            labels: ['40b81558-d372-41ae-9c2e-57d755676e82']
-                        }),
-                    });
-                    const result = await res.json();
+                    const today = new Date().toISOString().split('T')[0];
+                    const res = await fetch(
+                        'https://project.cowave.kr/api/v1/workspaces/danawa/projects/ce5cce0a-b306-4e83-84df-b86f384f21ec/issues/',
+                        {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            credentials: 'include',
+                            body: JSON.stringify({
+                                name: title,
+                                description_html: `<p>${content.replace(/\n/g, '<br/>')}</p>`,
+                                label_ids: ['40b81558-d372-41ae-9c2e-57d755676e82'],
+                                assignees: ['2a628ffe-eb35-411f-a26f-0d6c2cca2c58'],
+                                start_date: today,
+                                priority: 'medium',
+                            }),
+                        }
+                    );
 
-                    if (result.success) {
+                    if (res.ok) {
+                        const issue = await res.json();
+                        const issueUrl = `https://project.cowave.kr/danawa/projects/ce5cce0a-b306-4e83-84df-b86f384f21ec/issues/${issue.id}`;
                         const linkEl = document.getElementById('menu2-issue-link');
-                        if (linkEl && result.issueUrl) {
-                            linkEl.innerHTML = `<a href="${result.issueUrl}" target="_blank"
+                        if (linkEl) {
+                            linkEl.innerHTML = `<a href="${issueUrl}" target="_blank"
                                 style="color: #6366f1; font-size: 14px; text-decoration: underline;">
                                 → Plane에서 요청서 확인하기</a>`;
                         }
+                        localStorage.removeItem('menu2_draft');
+                        localStorage.removeItem('menu2_autosubmit');
                         app.goToPage('menu2-success');
                     } else {
                         const banner = document.getElementById('menu2-login-banner');
@@ -2201,6 +2245,7 @@ ${menuSettings}`;
 
             goToPlaneLogin() {
                 this.saveToStorage();
+                localStorage.setItem('menu2_autosubmit', '1');
                 window.location.href = 'https://project.cowave.kr/danawa/';
             },
 
@@ -2286,6 +2331,10 @@ ${menuSettings}`;
                     });
                     this.toggleRoleDetail();
                     localStorage.removeItem('menu4_draft');
+                    if (localStorage.getItem('menu4_autosubmit')) {
+                        localStorage.removeItem('menu4_autosubmit');
+                        setTimeout(() => this.goToScreen2(), 300);
+                    }
                 } catch(e) {}
             },
 
@@ -2328,24 +2377,35 @@ ${menuSettings}`;
                 if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = '등록 중...'; }
 
                 try {
-                    const res = await fetch('/.netlify/functions/plane-submit', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            title,
-                            content,
-                            labels: ['bab7325d-a998-4598-b668-39f35d2f811e']
-                        }),
-                    });
-                    const result = await res.json();
+                    const today = new Date().toISOString().split('T')[0];
+                    const res = await fetch(
+                        'https://project.cowave.kr/api/v1/workspaces/danawa/projects/ce5cce0a-b306-4e83-84df-b86f384f21ec/issues/',
+                        {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            credentials: 'include',
+                            body: JSON.stringify({
+                                name: title,
+                                description_html: `<p>${content.replace(/\n/g, '<br/>')}</p>`,
+                                label_ids: ['bab7325d-a998-4598-b668-39f35d2f811e'],
+                                assignees: ['2a628ffe-eb35-411f-a26f-0d6c2cca2c58'],
+                                start_date: today,
+                                priority: 'medium',
+                            }),
+                        }
+                    );
 
-                    if (result.success) {
+                    if (res.ok) {
+                        const issue = await res.json();
+                        const issueUrl = `https://project.cowave.kr/danawa/projects/ce5cce0a-b306-4e83-84df-b86f384f21ec/issues/${issue.id}`;
                         const linkEl = document.getElementById('menu4-issue-link');
-                        if (linkEl && result.issueUrl) {
-                            linkEl.innerHTML = `<a href="${result.issueUrl}" target="_blank"
+                        if (linkEl) {
+                            linkEl.innerHTML = `<a href="${issueUrl}" target="_blank"
                                 style="color: #6366f1; font-size: 14px; text-decoration: underline;">
                                 → Plane에서 요청서 확인하기</a>`;
                         }
+                        localStorage.removeItem('menu4_draft');
+                        localStorage.removeItem('menu4_autosubmit');
                         app.goToPage('menu4-success');
                     } else {
                         const banner = document.getElementById('menu4-login-banner');
@@ -2363,6 +2423,7 @@ ${menuSettings}`;
 
             goToPlaneLogin() {
                 this.saveToStorage();
+                localStorage.setItem('menu4_autosubmit', '1');
                 window.location.href = 'https://project.cowave.kr/danawa/';
             },
 
