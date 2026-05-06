@@ -5,7 +5,7 @@ exports.handler = async (event) => {
 
     try {
         const data = JSON.parse(event.body);
-        const { title, content } = data;
+        const { title, content, labels } = data;
 
         const PLANE_API_KEY = process.env.PLANE_API_KEY;
         const WORKSPACE_SLUG = 'danawa';
@@ -13,6 +13,7 @@ exports.handler = async (event) => {
         const ADMIN_USER_ID = '2a628ffe-eb35-411f-a26f-0d6c2cca2c58';
         const LABEL_ACCOUNT = 'e18f8084-7cde-45fe-81af-35ee51c807b4';
         const LABEL_PERMISSION = '40b81558-d372-41ae-9c2e-57d755676e82';
+        const LABEL_IDS = labels || [LABEL_ACCOUNT, LABEL_PERMISSION];
 
         const headers = {
             'X-API-Key': PLANE_API_KEY,
@@ -82,7 +83,7 @@ exports.handler = async (event) => {
         const issueBody = {
             name: title,
             description_html: `<p>${content.replace(/\n/g, '<br/>')}</p>`,
-            label_ids: [LABEL_ACCOUNT, LABEL_PERMISSION],
+            label_ids: LABEL_IDS,
             assignees: [ADMIN_USER_ID],
             start_date: today,
             state: null,

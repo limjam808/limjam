@@ -912,17 +912,6 @@
             </div>
 
             <div class="form-wrapper">
-                <!-- Notice Box with Link -->
-                <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 24px; padding: 16px; background: #f0f4ff; border-radius: 8px;">
-                    <div style="flex: 1; font-size: 14px; color: #1a1a1a;">
-                        플레인 > <span style="font-weight: 600; color: #ef4444;">서비스기획팀_권한요청</span> 프로젝트 가입이 필요합니다
-                    </div>
-                    <a href="https://project.cowave.kr/danawa/projects/ce5cce0a-b306-4e83-84df-b86f384f21ec/issues/" target="_blank"
-                       style="display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; padding: 10px 16px; background: #6366f1; color: #ffffff; border-radius: 6px; text-decoration: none; font-size: 13px; font-weight: 600;">
-                        프로젝트 가입하기 →
-                    </a>
-                </div>
-
                 <div class="divider"></div>
 
                 <form id="menu2-form">
@@ -979,7 +968,7 @@
             </div>
         </div>
 
-        <!-- Menu 2 - Screen 2: 결과 -->
+        <!-- Menu 2 - Screen 2: 결과 (Plane 등록 실패 시) -->
         <div id="page-menu2-screen2" class="page">
             <button class="back-button" onclick="app.goToPage('menu2-screen1')">← 이전</button>
 
@@ -987,15 +976,15 @@
                 <h1>요청서 생성</h1>
             </div>
 
-            <!-- Notice Box with Link -->
-            <div style="max-width: 800px; margin: 0 auto 24px; display: flex; align-items: center; gap: 16px; padding: 16px; background: #f0f4ff; border-radius: 8px;">
-                <div style="flex: 1; font-size: 14px; color: #1a1a1a;">
-                    플레인 > <span style="font-weight: 600; color: #ef4444;">서비스기획팀_권한요청</span> 프로젝트 가입이 필요합니다
+            <!-- Plane 로그인 필요 배너 -->
+            <div id="menu2-login-banner" style="max-width: 800px; margin: 0 auto 24px; display: flex; align-items: center; gap: 16px; padding: 16px; background: #fff3cd; border: 1px solid #ffc107; border-radius: 8px;">
+                <div style="flex: 1; font-size: 14px; color: #856404;">
+                    ⚠️ Plane 로그인이 필요합니다. 로그인 후 돌아오면 내용이 자동 복원됩니다.
                 </div>
-                <a href="https://project.cowave.kr/danawa/projects/ce5cce0a-b306-4e83-84df-b86f384f21ec/issues/" target="_blank"
-                   style="display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; padding: 10px 16px; background: #6366f1; color: #ffffff; border-radius: 6px; text-decoration: none; font-size: 13px; font-weight: 600;">
-                    프로젝트 가입하기 →
-                </a>
+                <button type="button" onclick="menu2App.goToPlaneLogin()"
+                   style="display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; padding: 10px 16px; background: #6366f1; color: #ffffff; border: none; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600;">
+                    Plane 로그인하기 →
+                </button>
             </div>
 
             <div class="form-wrapper">
@@ -1017,6 +1006,21 @@
 
                 <div class="button-group">
                     <button type="button" class="button primary" onclick="app.goToPage('main')" style="width: 100%;">메인으로 돌아가기</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Menu 2 - 성공 화면 -->
+        <div id="page-menu2-success" class="page">
+            <div class="form-wrapper">
+                <div class="success-screen">
+                    <div class="success-icon">✓</div>
+                    <h2>요청서가 등록되었습니다!</h2>
+                    <p>Plane 프로젝트에 요청서가 자동으로 등록되었습니다.</p>
+                    <div id="menu2-issue-link" style="margin: 16px 0;"></div>
+                    <div class="button-group" style="justify-content: center;">
+                        <button type="button" class="button primary" onclick="app.goToPage('main')">메인으로 돌아가기</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1268,7 +1272,7 @@
             </div>
         </div>
 
-        <!-- Menu 4 - Screen 2: Result with Modal -->
+        <!-- Menu 4 - Screen 2: 결과 (Plane 등록 실패 시) -->
         <div id="page-menu4-screen2" class="page">
             <button class="back-button" onclick="app.goToPage('menu4-screen1')">← 이전</button>
 
@@ -1276,14 +1280,19 @@
                 <h1>요청서 생성</h1>
             </div>
 
-            <div class="form-wrapper">
-                <!-- Top Info Bar -->
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; background: #e8ebf8; padding: 12px 16px; border-radius: 6px;">
-                    <p style="font-size: 13px; color: #6366f1; margin: 0;"><span style="color: #6366f1;">플레인 ></span> <span style="color: #e74c3c;">서비스기획팀 권한요청</span> 프로젝트 가입이 필요합니다</p>
-                    <button type="button" class="button" style="padding: 6px 12px; font-size: 12px; background-color: #6366f1; color: white; border: none; border-radius: 4px; cursor: pointer;">프로젝트 가입하기 →</button>
+            <!-- Plane 로그인 필요 배너 -->
+            <div id="menu4-login-banner" style="max-width: 800px; margin: 0 auto 24px; display: flex; align-items: center; gap: 16px; padding: 16px; background: #fff3cd; border: 1px solid #ffc107; border-radius: 8px;">
+                <div style="flex: 1; font-size: 14px; color: #856404;">
+                    ⚠️ Plane 로그인이 필요합니다. 로그인 후 돌아오면 내용이 자동 복원됩니다.
                 </div>
+                <button type="button" onclick="menu4App.goToPlaneLogin()"
+                   style="display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; padding: 10px 16px; background: #6366f1; color: #ffffff; border: none; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600;">
+                    Plane 로그인하기 →
+                </button>
+            </div>
 
-                <!-- Title Box (Large) -->
+            <div class="form-wrapper">
+                <!-- Title Box -->
                 <div style="position: relative; margin-bottom: 24px;">
                     <button type="button" class="button" style="position: absolute; top: 12px; right: 12px; padding: 6px 12px; font-size: 12px; background-color: #ffffff; color: #6366f1; border: 1px solid #6366f1; border-radius: 4px; cursor: pointer;" onclick="menu4App.copyToClipboard('title')">복사</button>
                     <div style="background: #6366f1; border-radius: 8px; padding: 20px 16px; color: white;">
@@ -1301,7 +1310,21 @@
 
                 <button type="button" class="button primary" style="width: 100%; padding: 12px; font-size: 15px;" onclick="app.goToPage('main')">메인으로 돌아가기</button>
             </div>
+        </div>
 
+        <!-- Menu 4 - 성공 화면 -->
+        <div id="page-menu4-success" class="page">
+            <div class="form-wrapper">
+                <div class="success-screen">
+                    <div class="success-icon">✓</div>
+                    <h2>요청서가 등록되었습니다!</h2>
+                    <p>Plane 프로젝트에 요청서가 자동으로 등록되었습니다.</p>
+                    <div id="menu4-issue-link" style="margin: 16px 0;"></div>
+                    <div class="button-group" style="justify-content: center;">
+                        <button type="button" class="button primary" onclick="app.goToPage('main')">메인으로 돌아가기</button>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Menu 5 - Screen 1: Basic Info + Tree Builder -->
@@ -1438,6 +1461,12 @@
                 window.scrollTo(0, 0);
                 if (pageId === 'menu1-screen1') {
                     menu1App.restoreFromStorage();
+                }
+                if (pageId === 'menu2-screen1') {
+                    menu2App.restoreFromStorage();
+                }
+                if (pageId === 'menu4-screen1') {
+                    menu4App.restoreFromStorage();
                 }
             },
 
@@ -1902,6 +1931,12 @@ ${menuSettings}`;
             if (localStorage.getItem('menu1_draft')) {
                 app.goToPage('menu1-screen1');
             }
+            if (localStorage.getItem('menu2_draft')) {
+                app.goToPage('menu2-screen1');
+            }
+            if (localStorage.getItem('menu4_draft')) {
+                app.goToPage('menu4-screen1');
+            }
         });
 
         // Menu 1 Application
@@ -2087,11 +2122,86 @@ ${menuSettings}`;
                 permissions: ''
             },
 
-            goToScreen2() {
+            restoreFromStorage() {
+                const saved = localStorage.getItem('menu2_draft');
+                if (!saved) return;
+                try {
+                    const data = JSON.parse(saved);
+                    const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
+                    set('menu2-requester', data.requester);
+                    set('menu2-team', data.team);
+                    set('menu2-target-name', data.targetName);
+                    set('menu2-target-team', data.targetTeam);
+                    set('menu2-target-id', data.targetId);
+                    set('menu2-permissions', data.permissions);
+                    if (data.server) {
+                        const radio = document.querySelector(`input[name="menu2-server"][value="${data.server}"]`);
+                        if (radio) radio.checked = true;
+                    }
+                    localStorage.removeItem('menu2_draft');
+                } catch(e) {}
+            },
+
+            saveToStorage() {
+                localStorage.setItem('menu2_draft', JSON.stringify(this.state));
+            },
+
+            async goToScreen2() {
                 this.saveFormData();
                 if (!this.validateForm()) return;
-                this.generateResult();
-                app.goToPage('menu2-screen2');
+
+                const serverDisplay = this.state.server === '모두' ? '운영/개발' : this.state.server;
+                const title = `[${this.state.team}] 권한 요청`;
+                const content = `요청자명: ${this.state.requester}
+서버: ${serverDisplay}
+대상자: ${this.state.targetTeam} ${this.state.targetName} (${this.state.targetId})
+필요 권한: ${this.state.permissions}`;
+
+                const resultTitle = document.getElementById('menu2-result-title');
+                const resultContent = document.getElementById('menu2-result-content');
+                if (resultTitle) resultTitle.textContent = title;
+                if (resultContent) resultContent.textContent = content;
+
+                const submitBtn = document.querySelector('#page-menu2-screen1 .button.primary');
+                if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = '등록 중...'; }
+
+                try {
+                    const res = await fetch('/.netlify/functions/plane-submit', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            title,
+                            content,
+                            labels: ['40b81558-d372-41ae-9c2e-57d755676e82']
+                        }),
+                    });
+                    const result = await res.json();
+
+                    if (result.success) {
+                        const linkEl = document.getElementById('menu2-issue-link');
+                        if (linkEl && result.issueUrl) {
+                            linkEl.innerHTML = `<a href="${result.issueUrl}" target="_blank"
+                                style="color: #6366f1; font-size: 14px; text-decoration: underline;">
+                                → Plane에서 요청서 확인하기</a>`;
+                        }
+                        app.goToPage('menu2-success');
+                    } else {
+                        const banner = document.getElementById('menu2-login-banner');
+                        if (banner) banner.style.display = 'flex';
+                        app.goToPage('menu2-screen2');
+                    }
+                } catch(e) {
+                    const banner = document.getElementById('menu2-login-banner');
+                    if (banner) banner.style.display = 'flex';
+                    app.goToPage('menu2-screen2');
+                } finally {
+                    if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = '요청서 내용 생성하기'; }
+                }
+            },
+
+            goToPlaneLogin() {
+                this.saveToStorage();
+                window.location.href = 'https://project.cowave.kr/danawa/';
             },
 
             saveFormData() {
@@ -2103,8 +2213,7 @@ ${menuSettings}`;
                     targetId: document.getElementById('menu2-target-id'),
                     permissions: document.getElementById('menu2-permissions')
                 };
-                if (!Object.values(els).every(el => el)) return; // 모든 요소 존재 확인
-
+                if (!Object.values(els).every(el => el)) return;
                 this.state.requester = els.requester.value;
                 this.state.team = els.team.value;
                 this.state.server = document.querySelector('input[name="menu2-server"]:checked')?.value || '';
@@ -2123,68 +2232,22 @@ ${menuSettings}`;
                     targetId: document.getElementById('menu2-target-id'),
                     permissions: document.getElementById('menu2-permissions')
                 };
-                if (!Object.values(els).every(el => el)) return false; // 요소 존재 확인
-
-                if (!els.requester.value.trim()) {
-                    alert('요청자명을 입력해주세요');
-                    return false;
-                }
-                if (!els.team.value.trim()) {
-                    alert('팀명을 입력해주세요');
-                    return false;
-                }
-                if (!document.querySelector('input[name="menu2-server"]:checked')) {
-                    alert('서버를 선택해주세요');
-                    return false;
-                }
-                if (!els.targetName.value.trim()) {
-                    alert('권한 부여 대상자 이름을 입력해주세요');
-                    return false;
-                }
-                if (!els.targetTeam.value.trim()) {
-                    alert('권한 부여 대상자 팀명을 입력해주세요');
-                    return false;
-                }
-                if (!els.targetId.value.trim()) {
-                    alert('권한 부여 대상자 사번을 입력해주세요');
-                    return false;
-                }
-                if (!els.permissions.value.trim()) {
-                    alert('필요 권한을 입력해주세요');
-                    return false;
-                }
+                if (!Object.values(els).every(el => el)) return false;
+                if (!els.requester.value.trim()) { alert('요청자명을 입력해주세요'); return false; }
+                if (!els.team.value.trim()) { alert('팀명을 입력해주세요'); return false; }
+                if (!document.querySelector('input[name="menu2-server"]:checked')) { alert('서버를 선택해주세요'); return false; }
+                if (!els.targetName.value.trim()) { alert('권한 부여 대상자 이름을 입력해주세요'); return false; }
+                if (!els.targetTeam.value.trim()) { alert('권한 부여 대상자 팀명을 입력해주세요'); return false; }
+                if (!els.targetId.value.trim()) { alert('권한 부여 대상자 사번을 입력해주세요'); return false; }
+                if (!els.permissions.value.trim()) { alert('필요 권한을 입력해주세요'); return false; }
                 return true;
-            },
-
-            generateResult() {
-                const resultTitle = document.getElementById('menu2-result-title');
-                const resultContent = document.getElementById('menu2-result-content');
-                if (!resultTitle || !resultContent) return; // 요소 존재 확인
-
-                const title = `[${this.state.team}] 권한 요청`;
-
-                const serverDisplay = this.state.server === '모두' ? '운영/개발' : this.state.server;
-                const content = `요청자명: ${this.state.requester}
-서버: ${serverDisplay}
-대상자: ${this.state.targetTeam} ${this.state.targetName} (${this.state.targetId})
-필요 권한: ${this.state.permissions}`;
-
-                resultTitle.textContent = title;
-                resultContent.textContent = content;
             },
 
             copyToClipboard(type) {
                 const resultTitle = document.getElementById('menu2-result-title');
                 const resultContent = document.getElementById('menu2-result-content');
-                if (!resultTitle || !resultContent) return; // 요소 존재 확인
-
-                let text = '';
-                if (type === 'title') {
-                    text = resultTitle.textContent;
-                } else {
-                    text = resultContent.textContent;
-                }
-
+                if (!resultTitle || !resultContent) return;
+                const text = type === 'title' ? resultTitle.textContent : resultContent.textContent;
                 navigator.clipboard.writeText(text).then(() => {
                     alert('복사 되었습니다. 요청서에 붙여넣기 해주세요.');
                 });
@@ -2203,34 +2266,111 @@ ${menuSettings}`;
                 services: ''
             },
 
+            restoreFromStorage() {
+                const saved = localStorage.getItem('menu4_draft');
+                if (!saved) return;
+                try {
+                    const data = JSON.parse(saved);
+                    const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
+                    set('menu4-requester', data.requester);
+                    set('menu4-team', data.team);
+                    set('menu4-services', data.services);
+                    ['menu4-admin', 'menu4-server', 'menu4-role', 'menu4-role-detail'].forEach(name => {
+                        const key = name.replace('menu4-', '').replace('-', '');
+                        const stateKey = name === 'menu4-role-detail' ? 'roleDetail' : name.replace('menu4-', '');
+                        const val = data[stateKey] || data[key];
+                        if (val) {
+                            const radio = document.querySelector(`input[name="${name}"][value="${val}"]`);
+                            if (radio) radio.checked = true;
+                        }
+                    });
+                    this.toggleRoleDetail();
+                    localStorage.removeItem('menu4_draft');
+                } catch(e) {}
+            },
+
+            saveToStorage() {
+                localStorage.setItem('menu4_draft', JSON.stringify(this.state));
+            },
+
             toggleRoleDetail() {
                 const role = document.querySelector('input[name="menu4-role"]:checked')?.value;
                 const detailContainer = document.getElementById('menu4-role-detail');
-                if (!detailContainer) return; // 요소 존재 확인
-
+                if (!detailContainer) return;
                 if (role === '운영') {
                     detailContainer.style.display = 'block';
                 } else {
                     detailContainer.style.display = 'none';
-                    document.querySelectorAll('input[name="menu4-role-detail"]').forEach(input => {
-                        input.checked = false;
-                    });
+                    document.querySelectorAll('input[name="menu4-role-detail"]').forEach(input => { input.checked = false; });
                 }
             },
 
-            goToScreen2() {
+            async goToScreen2() {
                 if (!this.validateForm()) return;
                 this.saveFormData();
-                this.generateResult();
-                app.goToPage('menu4-screen2');
+
+                const serverDisplay = this.state.server === '모두' ? '운영/개발' : this.state.server;
+                const title = `[${this.state.team}] ${this.state.admin} 통합관리자 ${serverDisplay} 권한 요청`;
+                const roleDisplay = this.state.role === '운영'
+                    ? `${this.state.role} - ${this.state.roleDetail}`
+                    : this.state.role;
+                const content = `요청자명: ${this.state.team} ${this.state.requester}
+관리자: ${this.state.admin} ${serverDisplay}
+역할: ${roleDisplay}
+권한: ${this.state.services}`;
+
+                const resultTitle = document.getElementById('menu4-result-title');
+                const resultContent = document.getElementById('menu4-result-content');
+                if (resultTitle) resultTitle.textContent = title;
+                if (resultContent) resultContent.textContent = content;
+
+                const submitBtn = document.querySelector('#page-menu4-screen1 .button.primary');
+                if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = '등록 중...'; }
+
+                try {
+                    const res = await fetch('/.netlify/functions/plane-submit', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            title,
+                            content,
+                            labels: ['bab7325d-a998-4598-b668-39f35d2f811e']
+                        }),
+                    });
+                    const result = await res.json();
+
+                    if (result.success) {
+                        const linkEl = document.getElementById('menu4-issue-link');
+                        if (linkEl && result.issueUrl) {
+                            linkEl.innerHTML = `<a href="${result.issueUrl}" target="_blank"
+                                style="color: #6366f1; font-size: 14px; text-decoration: underline;">
+                                → Plane에서 요청서 확인하기</a>`;
+                        }
+                        app.goToPage('menu4-success');
+                    } else {
+                        const banner = document.getElementById('menu4-login-banner');
+                        if (banner) banner.style.display = 'flex';
+                        app.goToPage('menu4-screen2');
+                    }
+                } catch(e) {
+                    const banner = document.getElementById('menu4-login-banner');
+                    if (banner) banner.style.display = 'flex';
+                    app.goToPage('menu4-screen2');
+                } finally {
+                    if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = '요청서 내용 생성하기'; }
+                }
+            },
+
+            goToPlaneLogin() {
+                this.saveToStorage();
+                window.location.href = 'https://project.cowave.kr/danawa/';
             },
 
             saveFormData() {
                 const requester = document.getElementById('menu4-requester');
                 const team = document.getElementById('menu4-team');
                 const services = document.getElementById('menu4-services');
-                if (!requester || !team || !services) return; // 요소 존재 확인
-
+                if (!requester || !team || !services) return;
                 this.state.requester = requester.value;
                 this.state.team = team.value;
                 this.state.admin = document.querySelector('input[name="menu4-admin"]:checked')?.value || '';
@@ -2244,78 +2384,23 @@ ${menuSettings}`;
                 const requester = document.getElementById('menu4-requester');
                 const team = document.getElementById('menu4-team');
                 const services = document.getElementById('menu4-services');
-                if (!requester || !team || !services) return false; // 요소 존재 확인
-
-                if (!requester.value.trim()) {
-                    alert('요청자명을 입력해주세요');
-                    return false;
-                }
-                if (!team.value.trim()) {
-                    alert('팀명을 입력해주세요');
-                    return false;
-                }
-                if (!document.querySelector('input[name="menu4-admin"]:checked')) {
-                    alert('통합 관리자를 선택해주세요');
-                    return false;
-                }
-                if (!document.querySelector('input[name="menu4-server"]:checked')) {
-                    alert('서버를 선택해주세요');
-                    return false;
-                }
-                if (!document.querySelector('input[name="menu4-role"]:checked')) {
-                    alert('권한 역할을 선택해주세요');
-                    return false;
-                }
+                if (!requester || !team || !services) return false;
+                if (!requester.value.trim()) { alert('요청자명을 입력해주세요'); return false; }
+                if (!team.value.trim()) { alert('팀명을 입력해주세요'); return false; }
+                if (!document.querySelector('input[name="menu4-admin"]:checked')) { alert('통합 관리자를 선택해주세요'); return false; }
+                if (!document.querySelector('input[name="menu4-server"]:checked')) { alert('서버를 선택해주세요'); return false; }
+                if (!document.querySelector('input[name="menu4-role"]:checked')) { alert('권한 역할을 선택해주세요'); return false; }
                 const role = document.querySelector('input[name="menu4-role"]:checked')?.value;
-                if (role === '운영' && !document.querySelector('input[name="menu4-role-detail"]:checked')) {
-                    alert('역할 세부를 선택해주세요');
-                    return false;
-                }
-                if (!services.value.trim()) {
-                    alert('필요 권한/서비스를 입력해주세요');
-                    return false;
-                }
+                if (role === '운영' && !document.querySelector('input[name="menu4-role-detail"]:checked')) { alert('역할 세부를 선택해주세요'); return false; }
+                if (!services.value.trim()) { alert('필요 권한/서비스를 입력해주세요'); return false; }
                 return true;
-            },
-
-            generateResult() {
-                const serverDisplay = this.state.server === '모두' ? '운영/개발' : this.state.server;
-                const title = `[${this.state.team}] ${this.state.admin} 통합관리자 ${serverDisplay} 권한 요청`;
-
-                const roleDisplay = this.state.role === '운영'
-                    ? `${this.state.role} - ${this.state.roleDetail}`
-                    : this.state.role;
-
-                const content = `요청자명: ${this.state.team} ${this.state.requester}
-관리자: ${this.state.admin} ${serverDisplay}
-역할: ${roleDisplay}
-권한: ${this.state.services}`;
-
-                const resultTitle = document.getElementById('menu4-result-title');
-                const resultContent = document.getElementById('menu4-result-content');
-                if (!resultTitle || !resultContent) return; // 요소 존재 확인
-
-                resultTitle.textContent = title;
-                resultContent.textContent = content;
-            },
-
-            handleLogin(didLogin) {
-                // 팝업 없이 바로 다음 페이지로 이동
-                app.goToPage('menu6');
             },
 
             copyToClipboard(type) {
                 const resultTitle = document.getElementById('menu4-result-title');
                 const resultContent = document.getElementById('menu4-result-content');
                 if (!resultTitle || !resultContent) return;
-
-                let text = '';
-                if (type === 'title') {
-                    text = resultTitle.textContent;
-                } else {
-                    text = resultContent.textContent;
-                }
-
+                const text = type === 'title' ? resultTitle.textContent : resultContent.textContent;
                 navigator.clipboard.writeText(text).then(() => {
                     alert('복사 되었습니다. 요청서에 붙여넣기 해주세요.');
                 });
